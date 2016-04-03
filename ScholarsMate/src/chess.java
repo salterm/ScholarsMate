@@ -48,27 +48,31 @@ public class chess {
     public static void boardSet(String strIn) {
         try {
             String[] strInSplit = strIn.split("\\n");
+
             //Validation test
             if (strInSplit.length != 7) {
                 throw new ChessError("Invalid state line count: " + strInSplit.length);
             }
 
             String[] moveAndPly = strInSplit[0].split("\\s");
+
             //Validation test
             if (moveAndPly.length != 2) {
                 throw new ChessError("Invalid first line: " + strInSplit[0]);
             }
 
-            for (String s : strInSplit) {
-                //Validation test
+            //Validation test
+            for (int i = 1; i < strInSplit.length; i++) {
+                String s = strInSplit[i];
                 if (s.length() != 5) {
                     throw new ChessError("Invalid board line: " + s);
                 }
             }
 
             int newMove = Integer.valueOf(moveAndPly[0]);
+
+            //Validation test
             if (newMove < 1 || newMove > 40) {
-                //Validation test
                 throw new ChessError("Invalid move number: " + newMove);
             }
 
