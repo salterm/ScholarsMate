@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 public class chess {
+    private static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
     private static final char startingBoard[][] = {
             {'k', 'q', 'b', 'n', 'r'},
             {'p', 'p', 'p', 'p', 'p'},
@@ -20,14 +21,11 @@ public class chess {
 
     private static State gameState;
 
-    public chess() {
-        gameState = new State();
-    }
-
     /**
      * Set game state to starting setup.
      */
     public static void reset() {
+        gameState = new State();
         gameState.setBoard(startingBoard);
         gameState.setMove(startingMove);
         gameState.setIsWhitesPly(startingIsWhitesPly);
@@ -270,6 +268,45 @@ public class chess {
         // with reference to the state of the game and return the possible moves - one example is given below - note that a move has exactly 6 characters
 
         Vector<String> strOut = new Vector<String>();
+        char c;
+
+        for (int row = 0; row < State.boardHeight; row++) {
+            for (int column = 0; column < State.boardWidth; column++) {
+                c = gameState.getBoard()[row][column];
+                if (isOwn(c)) {
+                    if (c == 'p') {
+                        //If S empty
+                        if (isValid(column, row + 1)) {
+
+                        }
+                        //If SE or SW enemy
+                    } else if (c == 'P') {
+                        //If N empty
+
+                        //If NE or NW enemy
+
+                    } else if (c == 'k' || c == 'K') {
+                        //If N not own
+                        //If NE not own
+                        //If E not own
+                        //If SE not own
+                        //If S not own
+                        //If SW not own
+                        //If W not own
+                        //If NW not own
+
+                    } else if (c == 'q' || c == 'Q') {
+
+                    } else if (c == 'b' || c == 'B') {
+
+                    } else if (c == 'n' || c == 'N') {
+
+                    } else if (c == 'r' || c == 'R') {
+
+                    }
+                }
+            }
+        }
 
         strOut.add("a5-a4\n");
         strOut.add("b5-b4\n");

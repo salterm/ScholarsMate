@@ -11,23 +11,23 @@ public class State {
         isWhitesPly = true;
     }
 
-    public State(int move, boolean isWhitesPly, char[][] board) {
+    public State(int move, boolean isWhitesPly, char[][] newBoard) {
         this.move = move;
         this.isWhitesPly = isWhitesPly;
-        board = new char[boardHeight][];
+        this.board = new char[boardHeight][boardWidth];
         for (int i = 0; i < boardHeight; i++) {
-            char[] column = board[i];
-            board[i] = new char[boardWidth];
-            System.arraycopy(column, 0, board[i], 0, boardWidth);
+            for (int j = 0; j < boardWidth; j++) {
+                this.board[i][j] = newBoard[i][j];
+            }
         }
     }
 
-    public void setBoard(char[][] board) {
-        board = new char[boardHeight][];
+    public void setBoard(final char[][] newBoard) {
+        this.board = new char[boardHeight][boardWidth];
         for (int i = 0; i < boardHeight; i++) {
-            char[] column = board[i];
-            board[i] = new char[boardWidth];
-            System.arraycopy(column, 0, board[i], 0, boardWidth);
+            for (int j = 0; j < boardWidth; j++) {
+                this.board[i][j] = newBoard[i][j];
+            }
         }
     }
 
@@ -40,7 +40,7 @@ public class State {
     }
 
     public int getMove() {
-        return this.move;
+        return move;
     }
 
     public void setIsWhitesPly(boolean isWhitesPly) {
