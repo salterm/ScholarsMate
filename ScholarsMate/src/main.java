@@ -1,3 +1,9 @@
+/*
+  CS 442 - Advanced AI: Combinatorial Games
+  Chess player, Homework 1
+  Michael Salter
+  04/07/16
+*/
 public class main {
     public static int intZeromq = 54372; // CHANGE THIS - OPTIONAL
     public static String strName = "ScholarsMate";

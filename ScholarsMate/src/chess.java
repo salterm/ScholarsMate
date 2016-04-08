@@ -1,3 +1,10 @@
+/*
+  CS 442 - Advanced AI: Combinatorial Games
+  Chess player, Homework 1
+  Michael Salter
+  04/07/16
+*/
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
@@ -72,7 +79,7 @@ public class chess {
             int newMove = Integer.valueOf(moveAndPly[0]);
 
             //Validation test
-            if (newMove < 1 || newMove > 40) {
+            if (newMove < 1 || newMove > 41) {
                 throw new ChessError("Invalid move number: " + newMove);
             }
 
@@ -132,6 +139,10 @@ public class chess {
                         blackHasKing = true;
                     } else if (c == 'K') {
                         whiteHasKing = true;
+                    }
+
+                    if (whiteHasKing && blackHasKing) {
+                        break;
                     }
                 }
             }
@@ -268,57 +279,326 @@ public class chess {
         return 0;
     }
 
+    /**
+     * Returns list of valid moves in format: "a1-b2"
+     *
+     * @return list of valid moves for the current state.
+     */
     public static Vector<String> moves() {
         // with reference to the state of the game and return the possible moves - one example is given below - note that a move has exactly 6 characters
 
         Vector<String> strOut = new Vector<String>();
-        char c;
+        char position;
 
         for (int row = 0; row < State.boardHeight; row++) {
             for (int column = 0; column < State.boardWidth; column++) {
-                c = gameState.getBoard()[row][column];
-                if (isOwn(c)) {
-                    if (c == 'p') {
-                        //If S empty
-                        if (isValid(column, row + 1)) {
-
-                        }
-                        //If SE or SW enemy
-                    } else if (c == 'P') {
-                        //If N empty
-
-                        //If NE or NW enemy
-
-                    } else if (c == 'k' || c == 'K') {
-                        //If N not own
-                        //If NE not own
-                        //If E not own
-                        //If SE not own
-                        //If S not own
-                        //If SW not own
-                        //If W not own
-                        //If NW not own
-
-                    } else if (c == 'q' || c == 'Q') {
-
-                    } else if (c == 'b' || c == 'B') {
-
-                    } else if (c == 'n' || c == 'N') {
-
-                    } else if (c == 'r' || c == 'R') {
-
+                position = gameState.getBoard()[row][column];
+                if (isOwn(position)) {
+                    String startPosition = columnNames[column] + row + "-";
+                    switch (position) {
+                        case 'p':
+                            //S
+                            if (isValid(column, row + 1) && isNothing(gameState.getBoard()[row + 1][column])) {
+                                strOut.add(startPosition + columnNames[column] + (row + 1) + "\n");
+                            }
+                            //SE
+                            if (isValid(column + 1, row + 1) && isEnemy(gameState.getBoard()[row + 1][column + 1])) {
+                                strOut.add(startPosition + columnNames[column + 1] + (row + 1) + "\n");
+                            }
+                            //SW
+                            if (isValid(column - 1, row + 1) && isEnemy(gameState.getBoard()[row + 1][column - 1])) {
+                                strOut.add(startPosition + columnNames[column - 1] + (row + 1) + "\n");
+                            }
+                            break;
+                        case 'P':
+                            //N
+                            if (isValid(column, row - 1) && isNothing(gameState.getBoard()[row - 1][column])) {
+                                strOut.add(startPosition + columnNames[column] + (row - 1) + "\n");
+                            }
+                            //NE
+                            if (isValid(column + 1, row - 1) && isEnemy(gameState.getBoard()[row - 1][column + 1])) {
+                                strOut.add(startPosition + columnNames[column + 1] + (row - 1) + "\n");
+                            }
+                            //NW
+                            if (isValid(column - 1, row - 1) && isEnemy(gameState.getBoard()[row - 1][column - 1])) {
+                                strOut.add(startPosition + columnNames[column - 1] + (row - 1) + "\n");
+                            }
+                            break;
+                        case 'k':
+                        case 'K':
+                            //N
+                            if (isValid(column, row - 1) && !isOwn(gameState.getBoard()[row - 1][column])) {
+                                strOut.add(startPosition + columnNames[column] + (row - 1) + "\n");
+                            }
+                            //NE
+                            if (isValid(column + 1, row - 1) && !isOwn(gameState.getBoard()[row - 1][column + 1])) {
+                                strOut.add(startPosition + columnNames[column + 1] + (row - 1) + "\n");
+                            }
+                            //E
+                            if (isValid(column + 1, row) && !isOwn(gameState.getBoard()[row][column + 1])) {
+                                strOut.add(startPosition + columnNames[column + 1] + (row) + "\n");
+                            }
+                            //SE
+                            if (isValid(column + 1, row + 1) && !isOwn(gameState.getBoard()[row + 1][column + 1])) {
+                                strOut.add(startPosition + columnNames[column + 1] + (row + 1) + "\n");
+                            }
+                            //S
+                            if (isValid(column, row + 1) && !isOwn(gameState.getBoard()[row + 1][column])) {
+                                strOut.add(startPosition + columnNames[column] + (row + 1) + "\n");
+                            }
+                            //SW
+                            if (isValid(column - 1, row + 1) && !isOwn(gameState.getBoard()[row + 1][column - 1])) {
+                                strOut.add(startPosition + columnNames[column - 1] + (row + 1) + "\n");
+                            }
+                            //W
+                            if (isValid(column - 1, row) && !isOwn(gameState.getBoard()[row][column - 1])) {
+                                strOut.add(startPosition + columnNames[column - 1] + (row) + "\n");
+                            }
+                            //NW
+                            if (isValid(column - 1, row - 1) && !isOwn(gameState.getBoard()[row - 1][column - 1])) {
+                                strOut.add(startPosition + columnNames[column - 1] + (row - 1) + "\n");
+                            }
+                            break;
+                        case 'q':
+                        case 'Q':
+                            //N
+                            for (int r = row - 1, c = column; isValid(r, c); r--) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //NE
+                            for (int r = row - 1, c = column + 1; isValid(r, c); r--, c++) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //E
+                            for (int r = row, c = column + 1; isValid(r, c); c++) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //SE
+                            for (int r = row + 1, c = column + 1; isValid(r, c); r++, c++) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //S
+                            for (int r = row + 1, c = column; isValid(r, c); r++) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //SW
+                            for (int r = row + 1, c = column - 1; isValid(r, c); r++, c--) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //W
+                            for (int r = row, c = column - 1; isValid(r, c); c--) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //NW
+                            for (int r = row - 1, c = column - 1; isValid(r, c); r--, c--) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        case 'b':
+                        case 'B':
+                            //N
+                            if (isValid(column, row - 1) && isNothing(gameState.getBoard()[row - 1][column])) {
+                                strOut.add(startPosition + columnNames[column] + (row - 1) + "\n");
+                            }
+                            //NE
+                            for (int r = row - 1, c = column + 1; isValid(r, c); r--, c++) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //E
+                            if (isValid(column + 1, row) && isNothing(gameState.getBoard()[row][column + 1])) {
+                                strOut.add(startPosition + columnNames[column + 1] + (row) + "\n");
+                            }
+                            //SE
+                            for (int r = row + 1, c = column + 1; isValid(r, c); r++, c++) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //S
+                            if (isValid(column, row + 1) && isNothing(gameState.getBoard()[row + 1][column])) {
+                                strOut.add(startPosition + columnNames[column] + (row + 1) + "\n");
+                            }
+                            //SW
+                            for (int r = row + 1, c = column - 1; isValid(r, c); r++, c--) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //W
+                            if (isValid(column - 1, row) && isNothing(gameState.getBoard()[row][column - 1])) {
+                                strOut.add(startPosition + columnNames[column - 1] + (row) + "\n");
+                            }
+                            //NW
+                            for (int r = row - 1, c = column - 1; isValid(r, c); r--, c--) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        case 'n':
+                        case 'N':
+                            //NW
+                            if (isValid(column - 1, row - 2) && !isOwn(gameState.getBoard()[row - 2][column - 1])) {
+                                strOut.add(startPosition + columnNames[column - 1] + (row - 2) + "\n");
+                            }
+                            //NE
+                            if (isValid(column + 1, row - 2) && !isOwn(gameState.getBoard()[row - 2][column + 1])) {
+                                strOut.add(startPosition + columnNames[column + 1] + (row - 2) + "\n");
+                            }
+                            //EN
+                            if (isValid(column + 2, row - 1) && !isOwn(gameState.getBoard()[row - 1][column + 2])) {
+                                strOut.add(startPosition + columnNames[column + 2] + (row - 1) + "\n");
+                            }
+                            //ES
+                            if (isValid(column + 2, row + 1) && !isOwn(gameState.getBoard()[row + 1][column + 2])) {
+                                strOut.add(startPosition + columnNames[column + 2] + (row + 1) + "\n");
+                            }
+                            //SE
+                            if (isValid(column + 1, row + 2) && !isOwn(gameState.getBoard()[row + 2][column + 1])) {
+                                strOut.add(startPosition + columnNames[column + 1] + (row + 2) + "\n");
+                            }
+                            //SW
+                            if (isValid(column - 1, row + 2) && !isOwn(gameState.getBoard()[row + 2][column - 1])) {
+                                strOut.add(startPosition + columnNames[column - 1] + (row + 2) + "\n");
+                            }
+                            //WS
+                            if (isValid(column - 2, row + 1) && !isOwn(gameState.getBoard()[row + 1][column - 2])) {
+                                strOut.add(startPosition + columnNames[column - 2] + (row + 1) + "\n");
+                            }
+                            //WN
+                            if (isValid(column - 2, row - 1) && !isOwn(gameState.getBoard()[row - 1][column - 2])) {
+                                strOut.add(startPosition + columnNames[column - 2] + (row - 1) + "\n");
+                            }
+                            break;
+                        case 'r':
+                        case 'R':
+                            //N
+                            for (int r = row - 1, c = column; isValid(r, c); r--) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //E
+                            for (int r = row, c = column + 1; isValid(r, c); c++) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //S
+                            for (int r = row + 1, c = column; isValid(r, c); r++) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            //W
+                            for (int r = row, c = column - 1; isValid(r, c); c--) {
+                                if (isOwn(gameState.getBoard()[r][c])) {
+                                    break;
+                                } else {
+                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    if (isEnemy(gameState.getBoard()[r][c])) {
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
                     }
                 }
             }
         }
-
-        strOut.add("a5-a4\n");
-        strOut.add("b5-b4\n");
-        strOut.add("c5-c4\n");
-        strOut.add("d5-d4\n");
-        strOut.add("e5-e4\n");
-        strOut.add("b6-a4\n");
-        strOut.add("b6-c4\n");
 
         return strOut;
     }
@@ -367,6 +647,9 @@ public class chess {
         // undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
     }
 
+    /**
+     * Class for returning exceptions to the user.
+     */
     private static class ChessError extends Exception {
         public ChessError(String message) {
             super(message);

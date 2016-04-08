@@ -1,3 +1,9 @@
+/*
+  CS 442 - Advanced AI: Combinatorial Games
+  Chess player, Homework 1
+  Michael Salter
+  04/07/16
+*/
 import java.util.Vector;
 
 import org.json.JSONObject;
