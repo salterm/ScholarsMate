@@ -185,11 +185,11 @@ public class chess {
      * @return True if the move is within bounds, false otherwise.
      */
     public static boolean isValid(int intX, int intY) {
-        if (intX < 0 || intX > State.boardWidth - 1) {
+        if (intX < 0 || intX >= State.boardWidth) {
             return false;
         }
 
-        if (intY < 0 || intY > State.boardHeight - 1) {
+        if (intY < 0 || intY >= State.boardHeight) {
             return false;
         }
 
@@ -336,7 +336,7 @@ public class chess {
         char position;
 
         for (int row = 0; row < State.boardHeight; row++) {
-            for (int column = 0; column < State.boardWidth; column++) {
+                for (int column = 0; column < State.boardWidth; column++) {
                 position = gameState.getBoard()[row][column];
                 if (isOwn(position)) {
                     String startPosition = columnNames[column] + row + "-";
@@ -407,7 +407,7 @@ public class chess {
                         case 'q':
                         case 'Q':
                             //N
-                            for (int r = row - 1, c = column; isValid(r, c); r--) {
+                            for (int r = row - 1, c = column; isValid(c, r); r--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -418,7 +418,7 @@ public class chess {
                                 }
                             }
                             //NE
-                            for (int r = row - 1, c = column + 1; isValid(r, c); r--, c++) {
+                            for (int r = row - 1, c = column + 1; isValid(c, r); r--, c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -429,7 +429,7 @@ public class chess {
                                 }
                             }
                             //E
-                            for (int r = row, c = column + 1; isValid(r, c); c++) {
+                            for (int r = row, c = column + 1; isValid(c, r); c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -440,7 +440,7 @@ public class chess {
                                 }
                             }
                             //SE
-                            for (int r = row + 1, c = column + 1; isValid(r, c); r++, c++) {
+                            for (int r = row + 1, c = column + 1; isValid(c, r); r++, c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -451,7 +451,7 @@ public class chess {
                                 }
                             }
                             //S
-                            for (int r = row + 1, c = column; isValid(r, c); r++) {
+                            for (int r = row + 1, c = column; isValid(c, r); r++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -462,7 +462,7 @@ public class chess {
                                 }
                             }
                             //SW
-                            for (int r = row + 1, c = column - 1; isValid(r, c); r++, c--) {
+                            for (int r = row + 1, c = column - 1; isValid(c, r); r++, c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -473,7 +473,7 @@ public class chess {
                                 }
                             }
                             //W
-                            for (int r = row, c = column - 1; isValid(r, c); c--) {
+                            for (int r = row, c = column - 1; isValid(c, r); c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -484,7 +484,7 @@ public class chess {
                                 }
                             }
                             //NW
-                            for (int r = row - 1, c = column - 1; isValid(r, c); r--, c--) {
+                            for (int r = row - 1, c = column - 1; isValid(c, r); r--, c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -502,7 +502,7 @@ public class chess {
                                 strOut.add(startPosition + columnNames[column] + (row - 1) + "\n");
                             }
                             //NE
-                            for (int r = row - 1, c = column + 1; isValid(r, c); r--, c++) {
+                            for (int r = row - 1, c = column + 1; isValid(c, r); r--, c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -517,7 +517,7 @@ public class chess {
                                 strOut.add(startPosition + columnNames[column + 1] + (row) + "\n");
                             }
                             //SE
-                            for (int r = row + 1, c = column + 1; isValid(r, c); r++, c++) {
+                            for (int r = row + 1, c = column + 1; isValid(c, r); r++, c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -532,7 +532,7 @@ public class chess {
                                 strOut.add(startPosition + columnNames[column] + (row + 1) + "\n");
                             }
                             //SW
-                            for (int r = row + 1, c = column - 1; isValid(r, c); r++, c--) {
+                            for (int r = row + 1, c = column - 1; isValid(c, r); r++, c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -547,7 +547,7 @@ public class chess {
                                 strOut.add(startPosition + columnNames[column - 1] + (row) + "\n");
                             }
                             //NW
-                            for (int r = row - 1, c = column - 1; isValid(r, c); r--, c--) {
+                            for (int r = row - 1, c = column - 1; isValid(c, r); r--, c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -596,7 +596,7 @@ public class chess {
                         case 'r':
                         case 'R':
                             //N
-                            for (int r = row - 1, c = column; isValid(r, c); r--) {
+                            for (int r = row - 1, c = column; isValid(c, r); r--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -607,7 +607,7 @@ public class chess {
                                 }
                             }
                             //E
-                            for (int r = row, c = column + 1; isValid(r, c); c++) {
+                            for (int r = row, c = column + 1; isValid(c, r); c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -618,7 +618,7 @@ public class chess {
                                 }
                             }
                             //S
-                            for (int r = row + 1, c = column; isValid(r, c); r++) {
+                            for (int r = row + 1, c = column; isValid(c, r); r++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
@@ -629,7 +629,7 @@ public class chess {
                                 }
                             }
                             //W
-                            for (int r = row, c = column - 1; isValid(r, c); c--) {
+                            for (int r = row, c = column - 1; isValid(c, r); c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
