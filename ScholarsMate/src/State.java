@@ -4,6 +4,7 @@
   Michael Salter
   04/07/16
 */
+
 public class State {
     public static final int boardWidth = 5;
     public static final int boardHeight = 6;

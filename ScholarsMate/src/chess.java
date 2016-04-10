@@ -17,6 +17,7 @@ public class chess {
     final static int bishopValue = 300;
     final static int queenValue = 900;
     final static int kingValue = 10000;
+
     private static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
     private static final char startingBoard[][] = {
             {'k', 'q', 'b', 'n', 'r'},
@@ -33,7 +34,7 @@ public class chess {
     private static final String whiteTurn = "W";
     private static final String blackTurn = "B";
 
-    private static State gameState;
+    public static State gameState;
 
     /**
      * Set game state to starting setup.
@@ -321,7 +322,11 @@ public class chess {
                 }
             }
         }
-        return 0;
+        return eval;
+    }
+
+    private static String moveBuilder(int startColumn, int startRow, int endColumn, int endRow) {
+        return columnNames[startColumn] + String.valueOf(startRow + 1) + "-" + columnNames[endColumn] + String.valueOf(endRow + 1) + "\n";
     }
 
     /**
@@ -336,72 +341,71 @@ public class chess {
         char position;
 
         for (int row = 0; row < State.boardHeight; row++) {
-                for (int column = 0; column < State.boardWidth; column++) {
+            for (int column = 0; column < State.boardWidth; column++) {
                 position = gameState.getBoard()[row][column];
                 if (isOwn(position)) {
-                    String startPosition = columnNames[column] + row + "-";
                     switch (position) {
                         case 'p':
                             //S
                             if (isValid(column, row + 1) && isNothing(gameState.getBoard()[row + 1][column])) {
-                                strOut.add(startPosition + columnNames[column] + (row + 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column, row + 1));
                             }
                             //SE
                             if (isValid(column + 1, row + 1) && isEnemy(gameState.getBoard()[row + 1][column + 1])) {
-                                strOut.add(startPosition + columnNames[column + 1] + (row + 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 1, row + 1));
                             }
                             //SW
                             if (isValid(column - 1, row + 1) && isEnemy(gameState.getBoard()[row + 1][column - 1])) {
-                                strOut.add(startPosition + columnNames[column - 1] + (row + 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 1, row + 1));
                             }
                             break;
                         case 'P':
                             //N
                             if (isValid(column, row - 1) && isNothing(gameState.getBoard()[row - 1][column])) {
-                                strOut.add(startPosition + columnNames[column] + (row - 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column, row - 1));
                             }
                             //NE
                             if (isValid(column + 1, row - 1) && isEnemy(gameState.getBoard()[row - 1][column + 1])) {
-                                strOut.add(startPosition + columnNames[column + 1] + (row - 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 1, row - 1));
                             }
                             //NW
                             if (isValid(column - 1, row - 1) && isEnemy(gameState.getBoard()[row - 1][column - 1])) {
-                                strOut.add(startPosition + columnNames[column - 1] + (row - 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 1, row - 1));
                             }
                             break;
                         case 'k':
                         case 'K':
                             //N
                             if (isValid(column, row - 1) && !isOwn(gameState.getBoard()[row - 1][column])) {
-                                strOut.add(startPosition + columnNames[column] + (row - 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column, row - 1));
                             }
                             //NE
                             if (isValid(column + 1, row - 1) && !isOwn(gameState.getBoard()[row - 1][column + 1])) {
-                                strOut.add(startPosition + columnNames[column + 1] + (row - 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 1, row - 1));
                             }
                             //E
                             if (isValid(column + 1, row) && !isOwn(gameState.getBoard()[row][column + 1])) {
-                                strOut.add(startPosition + columnNames[column + 1] + (row) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 1, (row)));
                             }
                             //SE
                             if (isValid(column + 1, row + 1) && !isOwn(gameState.getBoard()[row + 1][column + 1])) {
-                                strOut.add(startPosition + columnNames[column + 1] + (row + 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 1, row + 1));
                             }
                             //S
                             if (isValid(column, row + 1) && !isOwn(gameState.getBoard()[row + 1][column])) {
-                                strOut.add(startPosition + columnNames[column] + (row + 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column, row + 1));
                             }
                             //SW
                             if (isValid(column - 1, row + 1) && !isOwn(gameState.getBoard()[row + 1][column - 1])) {
-                                strOut.add(startPosition + columnNames[column - 1] + (row + 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 1, row + 1));
                             }
                             //W
                             if (isValid(column - 1, row) && !isOwn(gameState.getBoard()[row][column - 1])) {
-                                strOut.add(startPosition + columnNames[column - 1] + (row) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 1, (row)));
                             }
                             //NW
                             if (isValid(column - 1, row - 1) && !isOwn(gameState.getBoard()[row - 1][column - 1])) {
-                                strOut.add(startPosition + columnNames[column - 1] + (row - 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 1, row - 1));
                             }
                             break;
                         case 'q':
@@ -411,7 +415,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -422,7 +426,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -433,7 +437,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -444,7 +448,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -455,7 +459,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -466,7 +470,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -477,7 +481,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -488,7 +492,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -499,14 +503,14 @@ public class chess {
                         case 'B':
                             //N
                             if (isValid(column, row - 1) && isNothing(gameState.getBoard()[row - 1][column])) {
-                                strOut.add(startPosition + columnNames[column] + (row - 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column, row - 1));
                             }
                             //NE
                             for (int r = row - 1, c = column + 1; isValid(c, r); r--, c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -514,14 +518,14 @@ public class chess {
                             }
                             //E
                             if (isValid(column + 1, row) && isNothing(gameState.getBoard()[row][column + 1])) {
-                                strOut.add(startPosition + columnNames[column + 1] + (row) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 1, (row)));
                             }
                             //SE
                             for (int r = row + 1, c = column + 1; isValid(c, r); r++, c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -529,14 +533,14 @@ public class chess {
                             }
                             //S
                             if (isValid(column, row + 1) && isNothing(gameState.getBoard()[row + 1][column])) {
-                                strOut.add(startPosition + columnNames[column] + (row + 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column, row + 1));
                             }
                             //SW
                             for (int r = row + 1, c = column - 1; isValid(c, r); r++, c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -544,14 +548,14 @@ public class chess {
                             }
                             //W
                             if (isValid(column - 1, row) && isNothing(gameState.getBoard()[row][column - 1])) {
-                                strOut.add(startPosition + columnNames[column - 1] + (row) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 1, (row)));
                             }
                             //NW
                             for (int r = row - 1, c = column - 1; isValid(c, r); r--, c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -562,35 +566,35 @@ public class chess {
                         case 'N':
                             //NW
                             if (isValid(column - 1, row - 2) && !isOwn(gameState.getBoard()[row - 2][column - 1])) {
-                                strOut.add(startPosition + columnNames[column - 1] + (row - 2) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 1, row - 2));
                             }
                             //NE
                             if (isValid(column + 1, row - 2) && !isOwn(gameState.getBoard()[row - 2][column + 1])) {
-                                strOut.add(startPosition + columnNames[column + 1] + (row - 2) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 1, row - 2));
                             }
                             //EN
                             if (isValid(column + 2, row - 1) && !isOwn(gameState.getBoard()[row - 1][column + 2])) {
-                                strOut.add(startPosition + columnNames[column + 2] + (row - 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 2, row - 1));
                             }
                             //ES
                             if (isValid(column + 2, row + 1) && !isOwn(gameState.getBoard()[row + 1][column + 2])) {
-                                strOut.add(startPosition + columnNames[column + 2] + (row + 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 2, row + 1));
                             }
                             //SE
                             if (isValid(column + 1, row + 2) && !isOwn(gameState.getBoard()[row + 2][column + 1])) {
-                                strOut.add(startPosition + columnNames[column + 1] + (row + 2) + "\n");
+                                strOut.add(moveBuilder(column, row, column + 1, row + 2));
                             }
                             //SW
                             if (isValid(column - 1, row + 2) && !isOwn(gameState.getBoard()[row + 2][column - 1])) {
-                                strOut.add(startPosition + columnNames[column - 1] + (row + 2) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 1, row + 2));
                             }
                             //WS
                             if (isValid(column - 2, row + 1) && !isOwn(gameState.getBoard()[row + 1][column - 2])) {
-                                strOut.add(startPosition + columnNames[column - 2] + (row + 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 2, row + 1));
                             }
                             //WN
                             if (isValid(column - 2, row - 1) && !isOwn(gameState.getBoard()[row - 1][column - 2])) {
-                                strOut.add(startPosition + columnNames[column - 2] + (row - 1) + "\n");
+                                strOut.add(moveBuilder(column, row, column - 2, row - 1));
                             }
                             break;
                         case 'r':
@@ -600,7 +604,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -611,7 +615,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -622,7 +626,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -633,7 +637,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(startPosition + columnNames[c] + r + "\n");
+                                    strOut.add(moveBuilder(column, row, c, r));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -682,11 +686,11 @@ public class chess {
                     startColumn = 4;
                     break;
             }
-            int startRow = charIn.charAt(1);
+            int startRow = Character.getNumericValue(charIn.charAt(1)) - 1;
 
             //Validation test
             if (!isValid(startColumn, startRow)) {
-                throw new ChessError("Invalid move: " + charIn);
+                throw new ChessError("Invalid starting position for move: " + charIn + " (" + columnNames[startColumn] + "," + startRow + ")");
             }
 
             char piece = gameState.getBoard()[startRow][startColumn];
@@ -710,11 +714,11 @@ public class chess {
                     endColumn = 4;
                     break;
             }
-            int endRow = charIn.charAt(4);
+            int endRow = Character.getNumericValue(charIn.charAt(4)) - 1;
 
             //Validation test
-            if (!isValid(startColumn, startRow)) {
-                throw new ChessError("Invalid move: " + charIn);
+            if (!isValid(endColumn, endRow)) {
+                throw new ChessError("Invalid ending position for move: " + charIn);
             }
 
             if (piece == 'p' && endRow == State.boardHeight - 1) {
