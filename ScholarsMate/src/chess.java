@@ -10,6 +10,13 @@ import java.util.Arrays;
 import java.util.Vector;
 
 public class chess {
+    //Evaluation heuristic values
+    final static int pawnValue = 100;
+    final static int rookValue = 500;
+    final static int knightValue = 300;
+    final static int bishopValue = 300;
+    final static int queenValue = 900;
+    final static int kingValue = 10000;
     private static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
     private static final char startingBoard[][] = {
             {'k', 'q', 'b', 'n', 'r'},
@@ -275,7 +282,45 @@ public class chess {
 
     public static int eval() {
         // with reference to the state of the game, return the the evaluation score of the side on move - note that positive means an advantage while negative means a disadvantage
+        int eval = 0;
+        int pieceEval = 0;
+        for (char[] ca : gameState.getBoard()) {
+            for (char c : ca) {
+                switch (c) {
+                    case 'p':
+                    case 'P':
+                        pieceEval = pawnValue;
+                        break;
+                    case 'r':
+                    case 'R':
+                        pieceEval = rookValue;
+                        break;
+                    case 'n':
+                    case 'N':
+                        pieceEval = knightValue;
+                        break;
+                    case 'b':
+                    case 'B':
+                        pieceEval = bishopValue;
+                        break;
+                    case 'q':
+                    case 'Q':
+                        pieceEval = queenValue;
+                        break;
+                    case 'k':
+                    case 'K':
+                        pieceEval = kingValue;
+                        break;
+                }
 
+                if (isOwn(c)) {
+                    eval = eval + pieceEval;
+
+                } else if (isEnemy(c)) {
+                    eval = eval - pieceEval;
+                }
+            }
+        }
         return 0;
     }
 
@@ -617,6 +662,79 @@ public class chess {
 
     public static void move(String charIn) {
         // perform the supplied move (for example "a5-a4\n") and update the state of the game / your internal variables accordingly - note that it advised to do a sanity check of the supplied move
+        try {
+            char firstLetter = charIn.charAt(0);
+            int startColumn = -1;
+            switch (firstLetter) {
+                case 'a':
+                    startColumn = 0;
+                    break;
+                case 'b':
+                    startColumn = 1;
+                    break;
+                case 'c':
+                    startColumn = 2;
+                    break;
+                case 'd':
+                    startColumn = 3;
+                    break;
+                case 'e':
+                    startColumn = 4;
+                    break;
+            }
+            int startRow = charIn.charAt(1);
+
+            //Validation test
+            if (!isValid(startColumn, startRow)) {
+                throw new ChessError("Invalid move: " + charIn);
+            }
+
+            char piece = gameState.getBoard()[startRow][startColumn];
+
+            char lastLetter = charIn.charAt(3);
+            int endColumn = -1;
+            switch (lastLetter) {
+                case 'a':
+                    endColumn = 0;
+                    break;
+                case 'b':
+                    endColumn = 1;
+                    break;
+                case 'c':
+                    endColumn = 2;
+                    break;
+                case 'd':
+                    endColumn = 3;
+                    break;
+                case 'e':
+                    endColumn = 4;
+                    break;
+            }
+            int endRow = charIn.charAt(4);
+
+            //Validation test
+            if (!isValid(startColumn, startRow)) {
+                throw new ChessError("Invalid move: " + charIn);
+            }
+
+            if (piece == 'p' && endRow == State.boardHeight - 1) {
+                piece = 'q';
+            } else if (piece == 'P' && endRow == 0) {
+                piece = 'Q';
+            }
+
+
+            gameState.setPosition(startRow, startColumn, '.');
+            gameState.setPosition(endRow, endColumn, piece);
+            boolean isWhitesPly = gameState.getIsWhitesPly();
+            if (!isWhitesPly) {
+                gameState.setMove(gameState.getMove() + 1);
+            }
+            gameState.setIsWhitesPly(!isWhitesPly);
+        } catch (ChessError e) {
+            System.out.println(e.getMessage());
+            System.exit(-1);
+        }
     }
 
     public static String moveRandom() {
@@ -645,14 +763,5 @@ public class chess {
 
     public static void undo() {
         // undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
-    }
-
-    /**
-     * Class for returning exceptions to the user.
-     */
-    private static class ChessError extends Exception {
-        public ChessError(String message) {
-            super(message);
-        }
     }
 }

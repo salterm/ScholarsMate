@@ -57,6 +57,14 @@ public class State {
         return isWhitesPly;
     }
 
+    public void setPosition (int row, int column, char position) throws ChessError {
+        if (row < 0 || row >= boardHeight || column < 0 || column >= boardWidth) {
+            throw new ChessError("Invalid board dimensions: " + row + " x " + column);
+        } else {
+            board[row][column] = position;
+        }
+    }
+
     public String toString() {
         String s = move + " " + (isWhitesPly ? "W" : "B") + "\n";
         for (char[] ca : board) {
