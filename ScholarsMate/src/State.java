@@ -8,18 +8,18 @@
 public class State {
     public static final int boardWidth = 5;
     public static final int boardHeight = 6;
-    private char[][] board;
-    private int move;
+    private char[][] board; //[row][column]
+    private int moveNumber;
     private boolean isWhitesPly;
 
     public State() {
         this.board = new char[boardHeight][boardWidth];
-        move = 1;
+        moveNumber = 1;
         isWhitesPly = true;
     }
 
-    public State(int move, boolean isWhitesPly, char[][] newBoard) {
-        this.move = move;
+    public State(int moveNumber, boolean isWhitesPly, char[][] newBoard) {
+        this.moveNumber = moveNumber;
         this.isWhitesPly = isWhitesPly;
         this.board = new char[boardHeight][boardWidth];
         for (int i = 0; i < boardHeight; i++) {
@@ -42,12 +42,12 @@ public class State {
         return board;
     }
 
-    public void setMove(int move) {
-        this.move = move;
+    public void setMoveNumber(int moveNumber) {
+        this.moveNumber = moveNumber;
     }
 
-    public int getMove() {
-        return move;
+    public int getMoveNumber() {
+        return moveNumber;
     }
 
     public void setIsWhitesPly(boolean isWhitesPly) {
@@ -58,7 +58,7 @@ public class State {
         return isWhitesPly;
     }
 
-    public void setPosition (int row, int column, char position) throws ChessError {
+    public void setPosition(int row, int column, char position) throws ChessError {
         if (row < 0 || row >= boardHeight || column < 0 || column >= boardWidth) {
             throw new ChessError("Invalid board dimensions: " + row + " x " + column);
         } else {
@@ -66,8 +66,30 @@ public class State {
         }
     }
 
+    public void move(Move m) {
+        char c = board[m.startRow][m.startColumn];
+        //Update start position
+        board[m.startRow][m.startColumn] = '.';
+
+        //Check for pawn promotion
+        if (c == 'p' && m.endRow == 5) {
+            c = 'q';
+        } else if (c == 'P' && m.endRow == 0) {
+            c = 'Q';
+        }
+
+        //Update end position
+        board[m.endRow][m.endColumn] = c;
+
+        //Update turn and/or move number
+        if (!isWhitesPly) {
+            moveNumber++;
+        }
+        isWhitesPly = !isWhitesPly;
+    }
+
     public String toString() {
-        String s = move + " " + (isWhitesPly ? "W" : "B") + "\n";
+        String s = moveNumber + " " + (isWhitesPly ? "W" : "B") + "\n";
         for (char[] ca : board) {
             for (char c : ca) {
                 s += c;

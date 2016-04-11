@@ -18,7 +18,7 @@ public class chess {
     final static int queenValue = 900;
     final static int kingValue = 10000;
 
-    private static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
+    public static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
     private static final char startingBoard[][] = {
             {'k', 'q', 'b', 'n', 'r'},
             {'p', 'p', 'p', 'p', 'p'},
@@ -42,7 +42,7 @@ public class chess {
     public static void reset() {
         gameState = new State();
         gameState.setBoard(startingBoard);
-        gameState.setMove(startingMove);
+        gameState.setMoveNumber(startingMove);
         gameState.setIsWhitesPly(startingIsWhitesPly);
     }
 
@@ -116,7 +116,7 @@ public class chess {
             }
 
             gameState.setBoard(newBoard);
-            gameState.setMove(newMove);
+            gameState.setMoveNumber(newMove);
             gameState.setIsWhitesPly(newIsWhitesPly);
         } catch (ChessError e) {
             System.out.println(e.getMessage());
@@ -135,7 +135,7 @@ public class chess {
      */
     public static char winner() {
         //Check move count
-        if (gameState.getMove() > 40) {
+        if (gameState.getMoveNumber() > 40) {
             return '=';
         } else {
             //Check who has kings on the board
@@ -335,9 +335,8 @@ public class chess {
      * @return list of valid moves for the current state.
      */
     public static Vector<String> moves() {
-        // with reference to the state of the game and return the possible moves - one example is given below - note that a move has exactly 6 characters
-
-        Vector<String> strOut = new Vector<String>();
+        Vector<String> outputMoveList = new Vector<String>();
+        Vector<Move> moveList = new Vector<Move>();
         char position;
 
         for (int row = 0; row < State.boardHeight; row++) {
@@ -348,64 +347,64 @@ public class chess {
                         case 'p':
                             //S
                             if (isValid(column, row + 1) && isNothing(gameState.getBoard()[row + 1][column])) {
-                                strOut.add(moveBuilder(column, row, column, row + 1));
+                                moveList.add(new Move(row, column, row + 1, column));
                             }
                             //SE
                             if (isValid(column + 1, row + 1) && isEnemy(gameState.getBoard()[row + 1][column + 1])) {
-                                strOut.add(moveBuilder(column, row, column + 1, row + 1));
+                                moveList.add(new Move(row, column, row + 1, column + 1));
                             }
                             //SW
                             if (isValid(column - 1, row + 1) && isEnemy(gameState.getBoard()[row + 1][column - 1])) {
-                                strOut.add(moveBuilder(column, row, column - 1, row + 1));
+                                moveList.add(new Move(row, column, row + 1, column - 1));
                             }
                             break;
                         case 'P':
                             //N
                             if (isValid(column, row - 1) && isNothing(gameState.getBoard()[row - 1][column])) {
-                                strOut.add(moveBuilder(column, row, column, row - 1));
+                                moveList.add(new Move(row, column, row - 1, column));
                             }
                             //NE
                             if (isValid(column + 1, row - 1) && isEnemy(gameState.getBoard()[row - 1][column + 1])) {
-                                strOut.add(moveBuilder(column, row, column + 1, row - 1));
+                                moveList.add(new Move(row, column, row - 1, column + 1));
                             }
                             //NW
                             if (isValid(column - 1, row - 1) && isEnemy(gameState.getBoard()[row - 1][column - 1])) {
-                                strOut.add(moveBuilder(column, row, column - 1, row - 1));
+                                moveList.add(new Move(row, column, row - 1, column - 1));
                             }
                             break;
                         case 'k':
                         case 'K':
                             //N
                             if (isValid(column, row - 1) && !isOwn(gameState.getBoard()[row - 1][column])) {
-                                strOut.add(moveBuilder(column, row, column, row - 1));
+                                moveList.add(new Move(row, column, row - 1, column));
                             }
                             //NE
                             if (isValid(column + 1, row - 1) && !isOwn(gameState.getBoard()[row - 1][column + 1])) {
-                                strOut.add(moveBuilder(column, row, column + 1, row - 1));
+                                moveList.add(new Move(row, column, row - 1, column + 1));
                             }
                             //E
                             if (isValid(column + 1, row) && !isOwn(gameState.getBoard()[row][column + 1])) {
-                                strOut.add(moveBuilder(column, row, column + 1, (row)));
+                                moveList.add(new Move(row, column, (row), column + 1));
                             }
                             //SE
                             if (isValid(column + 1, row + 1) && !isOwn(gameState.getBoard()[row + 1][column + 1])) {
-                                strOut.add(moveBuilder(column, row, column + 1, row + 1));
+                                moveList.add(new Move(row, column, row + 1, column + 1));
                             }
                             //S
                             if (isValid(column, row + 1) && !isOwn(gameState.getBoard()[row + 1][column])) {
-                                strOut.add(moveBuilder(column, row, column, row + 1));
+                                moveList.add(new Move(row, column, row + 1, column));
                             }
                             //SW
                             if (isValid(column - 1, row + 1) && !isOwn(gameState.getBoard()[row + 1][column - 1])) {
-                                strOut.add(moveBuilder(column, row, column - 1, row + 1));
+                                moveList.add(new Move(row, column, row + 1, column - 1));
                             }
                             //W
                             if (isValid(column - 1, row) && !isOwn(gameState.getBoard()[row][column - 1])) {
-                                strOut.add(moveBuilder(column, row, column - 1, (row)));
+                                moveList.add(new Move(row, column, (row), column - 1));
                             }
                             //NW
                             if (isValid(column - 1, row - 1) && !isOwn(gameState.getBoard()[row - 1][column - 1])) {
-                                strOut.add(moveBuilder(column, row, column - 1, row - 1));
+                                moveList.add(new Move(row, column, row - 1, column - 1));
                             }
                             break;
                         case 'q':
@@ -415,7 +414,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -426,7 +425,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -437,7 +436,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -448,7 +447,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -459,7 +458,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -470,7 +469,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -481,7 +480,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -492,7 +491,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -503,14 +502,14 @@ public class chess {
                         case 'B':
                             //N
                             if (isValid(column, row - 1) && isNothing(gameState.getBoard()[row - 1][column])) {
-                                strOut.add(moveBuilder(column, row, column, row - 1));
+                                moveList.add(new Move(row, column, row - 1, column));
                             }
                             //NE
                             for (int r = row - 1, c = column + 1; isValid(c, r); r--, c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -518,14 +517,14 @@ public class chess {
                             }
                             //E
                             if (isValid(column + 1, row) && isNothing(gameState.getBoard()[row][column + 1])) {
-                                strOut.add(moveBuilder(column, row, column + 1, (row)));
+                                moveList.add(new Move(row, column, (row), column + 1));
                             }
                             //SE
                             for (int r = row + 1, c = column + 1; isValid(c, r); r++, c++) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -533,14 +532,14 @@ public class chess {
                             }
                             //S
                             if (isValid(column, row + 1) && isNothing(gameState.getBoard()[row + 1][column])) {
-                                strOut.add(moveBuilder(column, row, column, row + 1));
+                                moveList.add(new Move(row, column, row + 1, column));
                             }
                             //SW
                             for (int r = row + 1, c = column - 1; isValid(c, r); r++, c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -548,14 +547,14 @@ public class chess {
                             }
                             //W
                             if (isValid(column - 1, row) && isNothing(gameState.getBoard()[row][column - 1])) {
-                                strOut.add(moveBuilder(column, row, column - 1, (row)));
+                                moveList.add(new Move(row, column, (row), column - 1));
                             }
                             //NW
                             for (int r = row - 1, c = column - 1; isValid(c, r); r--, c--) {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -566,35 +565,35 @@ public class chess {
                         case 'N':
                             //NW
                             if (isValid(column - 1, row - 2) && !isOwn(gameState.getBoard()[row - 2][column - 1])) {
-                                strOut.add(moveBuilder(column, row, column - 1, row - 2));
+                                moveList.add(new Move(row, column, row - 2, column - 1));
                             }
                             //NE
                             if (isValid(column + 1, row - 2) && !isOwn(gameState.getBoard()[row - 2][column + 1])) {
-                                strOut.add(moveBuilder(column, row, column + 1, row - 2));
+                                moveList.add(new Move(row, column, row - 2, column + 1));
                             }
                             //EN
                             if (isValid(column + 2, row - 1) && !isOwn(gameState.getBoard()[row - 1][column + 2])) {
-                                strOut.add(moveBuilder(column, row, column + 2, row - 1));
+                                moveList.add(new Move(row, column, row - 1, column + 2));
                             }
                             //ES
                             if (isValid(column + 2, row + 1) && !isOwn(gameState.getBoard()[row + 1][column + 2])) {
-                                strOut.add(moveBuilder(column, row, column + 2, row + 1));
+                                moveList.add(new Move(row, column, row + 1, column + 2));
                             }
                             //SE
                             if (isValid(column + 1, row + 2) && !isOwn(gameState.getBoard()[row + 2][column + 1])) {
-                                strOut.add(moveBuilder(column, row, column + 1, row + 2));
+                                moveList.add(new Move(row, column, row + 2, column + 1));
                             }
                             //SW
                             if (isValid(column - 1, row + 2) && !isOwn(gameState.getBoard()[row + 2][column - 1])) {
-                                strOut.add(moveBuilder(column, row, column - 1, row + 2));
+                                moveList.add(new Move(row, column, row + 2, column - 1));
                             }
                             //WS
                             if (isValid(column - 2, row + 1) && !isOwn(gameState.getBoard()[row + 1][column - 2])) {
-                                strOut.add(moveBuilder(column, row, column - 2, row + 1));
+                                moveList.add(new Move(row, column, row + 1, column - 2));
                             }
                             //WN
                             if (isValid(column - 2, row - 1) && !isOwn(gameState.getBoard()[row - 1][column - 2])) {
-                                strOut.add(moveBuilder(column, row, column - 2, row - 1));
+                                moveList.add(new Move(row, column, row - 1, column - 2));
                             }
                             break;
                         case 'r':
@@ -604,7 +603,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -615,7 +614,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -626,7 +625,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -637,7 +636,7 @@ public class chess {
                                 if (isOwn(gameState.getBoard()[r][c])) {
                                     break;
                                 } else {
-                                    strOut.add(moveBuilder(column, row, c, r));
+                                    moveList.add(new Move(row, column, r, c));
                                     if (isEnemy(gameState.getBoard()[r][c])) {
                                         break;
                                     }
@@ -649,7 +648,11 @@ public class chess {
             }
         }
 
-        return strOut;
+        for (Move m : moveList) {
+            outputMoveList.add(m.toString());
+        }
+
+        return outputMoveList;
     }
 
     public static Vector<String> movesShuffled() {
@@ -665,80 +668,7 @@ public class chess {
     }
 
     public static void move(String charIn) {
-        // perform the supplied move (for example "a5-a4\n") and update the state of the game / your internal variables accordingly - note that it advised to do a sanity check of the supplied move
-        try {
-            char firstLetter = charIn.charAt(0);
-            int startColumn = -1;
-            switch (firstLetter) {
-                case 'a':
-                    startColumn = 0;
-                    break;
-                case 'b':
-                    startColumn = 1;
-                    break;
-                case 'c':
-                    startColumn = 2;
-                    break;
-                case 'd':
-                    startColumn = 3;
-                    break;
-                case 'e':
-                    startColumn = 4;
-                    break;
-            }
-            int startRow = Character.getNumericValue(charIn.charAt(1)) - 1;
-
-            //Validation test
-            if (!isValid(startColumn, startRow)) {
-                throw new ChessError("Invalid starting position for move: " + charIn + " (" + columnNames[startColumn] + "," + startRow + ")");
-            }
-
-            char piece = gameState.getBoard()[startRow][startColumn];
-
-            char lastLetter = charIn.charAt(3);
-            int endColumn = -1;
-            switch (lastLetter) {
-                case 'a':
-                    endColumn = 0;
-                    break;
-                case 'b':
-                    endColumn = 1;
-                    break;
-                case 'c':
-                    endColumn = 2;
-                    break;
-                case 'd':
-                    endColumn = 3;
-                    break;
-                case 'e':
-                    endColumn = 4;
-                    break;
-            }
-            int endRow = Character.getNumericValue(charIn.charAt(4)) - 1;
-
-            //Validation test
-            if (!isValid(endColumn, endRow)) {
-                throw new ChessError("Invalid ending position for move: " + charIn);
-            }
-
-            if (piece == 'p' && endRow == State.boardHeight - 1) {
-                piece = 'q';
-            } else if (piece == 'P' && endRow == 0) {
-                piece = 'Q';
-            }
-
-
-            gameState.setPosition(startRow, startColumn, '.');
-            gameState.setPosition(endRow, endColumn, piece);
-            boolean isWhitesPly = gameState.getIsWhitesPly();
-            if (!isWhitesPly) {
-                gameState.setMove(gameState.getMove() + 1);
-            }
-            gameState.setIsWhitesPly(!isWhitesPly);
-        } catch (ChessError e) {
-            System.out.println(e.getMessage());
-            System.exit(-1);
-        }
+        gameState.move(new Move(charIn));
     }
 
     public static String moveRandom() {
