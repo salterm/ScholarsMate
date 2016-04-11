@@ -58,6 +58,13 @@ public class State {
         return isWhitesPly;
     }
 
+    public char getPosition(int row, int column) throws ChessError {
+        if (row < 0 || row >= boardHeight || column < 0 || column >= boardWidth) {
+            throw new ChessError("Invalid board dimensions: " + row + " x " + column);
+        }
+        return board[row][column];
+    }
+
     public void setPosition(int row, int column, char position) throws ChessError {
         if (row < 0 || row >= boardHeight || column < 0 || column >= boardWidth) {
             throw new ChessError("Invalid board dimensions: " + row + " x " + column);
