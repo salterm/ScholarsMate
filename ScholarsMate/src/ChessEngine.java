@@ -198,7 +198,7 @@ public class ChessEngine {
             case 'n':
             case 'r':
             case 'p':
-                 return gameState.getIsWhitesPly();
+                return gameState.getIsWhitesPly();
             case 'K':
             case 'Q':
             case 'B':
@@ -629,15 +629,27 @@ public class ChessEngine {
      * @return A vector of possible moves, randomly shuffled.
      */
     public static Vector<String> movesShuffled() throws ChessError {
-        Vector<String> shuffledMoveList = ChessEngine.moves();
+        Vector<String> shuffledMoveList = moves();
         Collections.shuffle(shuffledMoveList);
         return shuffledMoveList;
     }
 
     public static Vector<String> movesEvaluated() throws ChessError {
         // with reference to the state of the game, determine the possible moves and sort them in order of an increasing evaluation score before returning them - note that you can call the chess.moves() function in here
-        Vector<String> evaluatedMoveList = ChessEngine.moves();
-        return new Vector<String>();
+        // USE MOVESSHUFFLED()
+        Vector<String> evaluatedMoveList = movesShuffled();
+        Collections.sort(evaluatedMoveList, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return 0;
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return obj.equals(this);
+            }
+        });
+        return evaluatedMoveList;
     }
 
     /**
@@ -651,10 +663,9 @@ public class ChessEngine {
         gameState.move(m);
     }
 
-    public static String moveRandom() {
+    public static String moveRandom() throws ChessError {
         // perform a random move and return it - one example output is given below - note that you can call the chess.movesShuffled() function as well as the chess.move() function in here
-
-        return "a5-a4\n";
+        return movesShuffled().firstElement();
     }
 
     public static String moveGreedy() {
