@@ -1808,9 +1808,325 @@ public class chessEngineTest {
         assertFalse(movesCount(ChessEngine.movesShuffled()) > 10);
     }
 
+    private boolean movesOrder(Vector<String> evaluatedMovesList) throws Exception {
+        int[] intEval = new int[128];
+
+        for (int i = 0; i < evaluatedMovesList.size(); i++) {
+            ChessEngine.move(evaluatedMovesList.elementAt(i));
+            intEval[i] = ChessEngine.eval();
+            ChessEngine.undo();
+        }
+
+        for (int i = 0; i < evaluatedMovesList.size() - 1; i += 1) {
+            if (intEval[i] > intEval[i + 1]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     @Test
     public void movesEvaluated() throws Exception {
+        ChessEngine.reset();
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
 
+        ChessEngine.boardSet("12 B\n.kqn.\n.pr..\np..Pb\nP.pP.\n.PP.K\nRN.B.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("20 W\nb...r\n.p..p\nk.N.P\n.....\nP.PKp\nq....\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 B\n..Q.r\n...kp\npp.P.\nRp...\n.P.PN\n....K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("20 B\n.....\nk.q..\n.p...\n.Pp.B\n..n.P\nR.K..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 B\n.kbn.\np..Nr\n.ppPp\n.q..P\nPBP.Q\n..RK.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 B\nqkbr.\n.pp.n\np....\nP...p\nQP.NK\nR....\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 B\n....r\nkB.p.\n..p.p\n...Kb\np.P..\n.N...\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 B\nk.bnr\np..p.\nPq.Qp\n.pN.P\nRP.PB\n....K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 W\nkq.n.\np.p..\n.p.p.\nPbPQ.\n.P...\nRB.K.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("20 B\n.kb..\np.pp.\n..Pr.\n...P.\nP.K..\nRN.B.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 W\n.k.nr\n.Nbpp\nppq..\n.PPB.\nP.p.P\n.R..K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 W\n..k.r\np....\n.....\nK.n.P\n.PP..\nR..N.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\n...r.\nk.pPp\np..P.\nbP...\n.nN.K\nRB...\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 W\nk.q.r\nPp..p\nP..Pb\n..p.P\n.nPQK\n..R..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\nq...r\n...bp\np...N\np.P..\n.k.PP\n....K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 B\nkq..r\np.pN.\n.P..P\n.....\n.....\n.q.RK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 B\n.k.nr\npq..p\nP....\n....p\nN.PP.\n..BQK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("18 W\nk...r\nq...p\n.....\n.pNP.\nR...P\n..K..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("14 W\nb...r\np.pnp\nPpk.p\nN...Q\nP..PP\n.R..K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 W\n.qb.r\nkNp..\n...p.\nBp.p.\nPnP.P\nRQ.K.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 W\n.bQ..\nkpnpp\nB.p..\n..P..\nPPN.P\nR...K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("14 W\nkqbB.\npp.r.\nQ.P.p\n..pP.\nP...P\nRNK..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("11 B\n..bnr\n.kpN.\np...p\nPP..q\n.P.PK\nR.B.Q\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 W\n..r.k\np.q.p\np.KNP\n.....\nRpP.P\n...Q.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 W\nk..r.\nb....\n.Pppp\nP....\n.P.PP\n.R..K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("18 W\nkn..r\np..p.\nP...p\nB..p.\nR...q\n.Q..K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 W\nk.b.r\nQpq.p\n..P.p\n..p..\nP.PP.\nRN.K.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("11 B\n..bnr\n..kp.\npq.pN\nP..K.\n.PB.P\nR..Q.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\n.k..r\np.P.p\np....\n.Rnb.\n..PQp\n..B.K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 W\n..b..\n.qprp\npk...\nP..PP\n.RPpK\n..B..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("20 B\nkb.r.\n...pp\nP..q.\np.B..\nP.QPK\nR....\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 W\nkb.r.\n.p.q.\np.ppP\nP.B..\n.PK..\nRN.Q.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("18 B\n.kbr.\n..qp.\n.p..p\n.P..P\n.R.PQ\n...NK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 B\n.kq.r\npP.p.\nb..Pp\nN.P.K\nP...P\nR.B..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\n.k..r\n....p\nQ..bP\nP....\n...KP\nRN.q.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 W\n.b.qr\n.k..p\n...p.\nPp.pK\nRP.n.\n.....\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("14 B\nk...r\npn..p\n.q...\nPp.bP\n..PP.\nRB.KQ\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 B\n.kQbr\nq...p\nP...p\n.PK..\n..P..\nRB.n.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 B\nkb.n.\nq.p..\np....\nPp.P.\n.PPPK\nRB.Q.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 W\nk...r\n..Pbp\np....\nP...P\n.q.Np\nR...K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 B\nkb.n.\n.p..r\n.N...\n..PQ.\n...qP\nB...K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 B\nk..r.\nq.p..\np.Q..\n..PP.\nP....\n.RbQK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\n.N.r.\n.kbpp\np..p.\n.PpK.\nPB.nP\nR...Q\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("16 W\n..bnr\n..q..\nk..pp\n.pPPP\n.Q..K\nRN...\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("18 B\n.k...\n.n.Br\n.p.KP\npP.q.\nP..P.\nb....\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\n.k.nr\n...p.\n.N...\n.Pq.p\n...K.\nRQ..b\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("16 W\n.....\n.pprp\nk....\n.PpP.\nPRP..\n..BK.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("14 W\n.r...\n.qb.p\n.kp..\nPp...\nRP.nP\n..BK.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 W\n..r..\nknp..\npP.pp\n..pP.\nP..P.\nRB.QK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 B\nQ.k.r\np..pp\n....n\nRp..P\n..PK.\n..BN.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 W\n..b.r\npk.Kp\n.p...\n....q\nP.P.B\n..R..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("18 B\nkb...\n....B\n.ppr.\n.p..P\nPQ.N.\n..R.K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 B\nkqb..\np.R..\np..P.\n.....\n.p.BP\n.N..K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("20 B\n.kr..\n..p.p\np.Pp.\n..Q.b\nP.BKP\n.R...\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 B\nkb...\n..p.p\nP..B.\np...P\n..PrK\n.RQ..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("20 W\nk.r..\np..b.\nP...N\n..qp.\n..pP.\n..K..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 W\nkq.nr\np...p\n...pb\n...P.\n.p..P\nRBQ.K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 B\n.k.Qb\n..B.P\npp...\nN.P.q\n.....\n...RK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\n....r\npkpbN\n...q.\nPp.PB\n.P..P\nR...K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 B\n...nr\n....p\n.kP..\n..pb.\n.PQBP\nR...K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("16 B\n.k.r.\n..p.p\npp.p.\nNK..q\nPPP..\n...RQ\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 B\nk..b.\n.Q..r\np.p.p\nP...P\n...N.\nR.B.K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("18 B\n...r.\np...p\nqkpQP\n....b\np.P..\n.NR.K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\nkr...\n..Q.p\np.bpn\nN.P.P\n.P..P\nR...K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("18 B\nk...r\n.p..p\nQPPpP\nN...P\n..P.K\nR....\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 B\n.....\nk.r..\n..p.Q\nN.P..\nP....\nRb.K.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("14 B\nk.b..\np.Bpr\nq...p\n..Pp.\n.Q.K.\nRN...\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("16 W\nk....\npnqr.\n...p.\nR.NPp\n.BpPP\n...K.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 W\nk.bnr\n.qpNp\n.....\nR...P\n..PPp\nB...K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("11 B\nk...r\npb.p.\n.P.Bp\n.q...\nP..PP\nR..QK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 W\n..qbr\np.p.Q\nB....\np...P\n.pkN.\n...RK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 B\nk..nr\np..qp\n..P..\nP.P..\n..BPK\n.R.Q.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("18 W\n..kqr\n....p\n..Pbn\np.P..\nP...P\n.R.BK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("16 W\n.q...\n.k.Nr\npP.pn\nP.B.p\n.QP.p\nR..K.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 W\n..b.Q\n.k...\np.p.p\nPnP.P\n.PN.P\n..RBK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("16 W\n.q..r\nPkb.p\n.Bp..\n.P.nP\n..K..\nR..Q.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 B\nknb..\np..rp\np...p\n..PP.\n..R..\n.NBK.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 B\n...br\nkqpp.\nPp.Pp\nN.P..\nP..P.\nRB.KQ\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 W\n.k..r\np....\nP...p\nn.p.P\nb.pPK\nRB.Q.\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 B\n...nQ\nqkp..\np...P\nPpPp.\nP.B..\nR...K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 W\nk.b..\nQ..rp\nPp.Bn\n...q.\n.P.pP\nRN..K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 W\n.k.nr\np.q..\nP..Pb\nBpRQp\n..P.P\n....K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("20 B\n...nr\npB...\n.k..K\nP.qb.\nRPPp.\n.Q...\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("13 B\nk.B.r\np.b.p\n..npP\n.qp.K\nP.PP.\nRQ...\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 W\nkR..r\n...pP\np.pn.\n..b.P\nP.PK.\n....Q\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("14 B\nbqkr.\n..ppp\nPp...\n..QP.\nR.B.P\n....K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 B\nk..qr\np...p\n.pp.p\n.PnPP\nP.P.K\nR.B..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("16 W\n.q.n.\np...r\n.P.bp\n..pp.\nP.kP.\n.RBNK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("14 W\n..q.r\npk.pb\n.pp.p\nPPP.P\n..RP.\n.NBQK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("12 B\nqk.br\nn.p.p\np...P\n..pP.\nPP...\nRNB.K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("17 W\n..bnr\nk...p\np.pqP\n.....\nPP.B.\nR...K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("14 B\nkqr..\n.nb.p\n..Pp.\nBpP..\nR..QP\n.N..K\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 B\nr....\nkp..p\nQ.p..\nP.PBq\n.p...\nR.K..\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("21 W\nk..Qr\n.b...\np.q..\n...P.\nR.n.K\n.N...\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("16 W\nkqr..\n....p\nbpppn\n.P.K.\n.....\nR....\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 B\nk..Kr\n.Np..\np....\nP..qp\nBPPnQ\nR....\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\n.k..r\n.qp.p\nPp...\nP...P\nR.pP.\n..BQK\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("19 B\n.r...\npk.pp\n...n.\nb.qPP\nP..K.\n....Q\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
+
+        ChessEngine.boardSet("15 W\n.k..r\nbp...\nQ..p.\nR..PK\n.B...\n.N...\n");
+        assertTrue(movesOrder(ChessEngine.movesEvaluated()));
     }
 
     @Test

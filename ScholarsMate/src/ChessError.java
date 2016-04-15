@@ -8,7 +8,7 @@
 /**
  * Class for returning exceptions to the user.
  */
-public class ChessError extends Exception {
+public class ChessError extends RuntimeException {
     public ChessError(String message) {
         super(message);
     }

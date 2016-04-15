@@ -60,7 +60,7 @@ public class ChessEngine {
      *
      * @param strIn State as a string.
      */
-    public static void boardSet(String strIn) throws ChessError {
+    public static void boardSet(String strIn) {
         String[] strInSplit = strIn.split("\\n");
 
         //Validation test
@@ -302,7 +302,7 @@ public class ChessEngine {
      *
      * @return list of valid moves for the current state.
      */
-    public static Vector<String> moves() throws ChessError {
+    public static Vector<String> moves() {
         Vector<String> outputMoveList = new Vector<>();
         Vector<Move> moveList = new Vector<>();
         char position;
@@ -628,26 +628,28 @@ public class ChessEngine {
      *
      * @return A vector of possible moves, randomly shuffled.
      */
-    public static Vector<String> movesShuffled() throws ChessError {
+    public static Vector<String> movesShuffled() {
         Vector<String> shuffledMoveList = moves();
         Collections.shuffle(shuffledMoveList);
         return shuffledMoveList;
     }
 
-    public static Vector<String> movesEvaluated() throws ChessError {
-        // with reference to the state of the game, determine the possible moves and sort them in order of an increasing evaluation score before returning them - note that you can call the chess.moves() function in here
-        // USE MOVESSHUFFLED()
+    /**
+     * Returns a list of moves (as strings) in ascending order by their eval scores.
+     *
+     * @return A list of moves as strings in ascending order by their eval scores.
+     */
+    public static Vector<String> movesEvaluated() {
         Vector<String> evaluatedMoveList = movesShuffled();
-        Collections.sort(evaluatedMoveList, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return 0;
-            }
-
-            @Override
-            public boolean equals(Object obj) {
-                return obj.equals(this);
-            }
+        Collections.sort(evaluatedMoveList, (o1, o2) -> {
+            int eval1, eval2;
+            move(o1);
+            eval1 = eval();
+            undo();
+            move(o2);
+            eval2 = eval();
+            undo();
+            return eval1 - eval2;
         });
         return evaluatedMoveList;
     }
@@ -657,13 +659,13 @@ public class ChessEngine {
      *
      * @param charIn The move in question.
      */
-    public static void move(String charIn) throws ChessError {
+    public static void move(String charIn) {
         Move m = new Move(charIn, gameState);
         historyStack.push(m);
         gameState.move(m);
     }
 
-    public static String moveRandom() throws ChessError {
+    public static String moveRandom() {
         // perform a random move and return it - one example output is given below - note that you can call the chess.movesShuffled() function as well as the chess.move() function in here
         return movesShuffled().firstElement();
     }
@@ -688,10 +690,8 @@ public class ChessEngine {
 
     /**
      * Undo the last move and reset internal variables accordingly.
-     *
-     * @throws ChessError
      */
-    public static void undo() throws ChessError {
+    public static void undo() {
         if (historyStack.empty()) {
             throw new ChessError("No move available to undo!");
         } else {
