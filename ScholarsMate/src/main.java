@@ -17,11 +17,6 @@ public class main {
         assert main.clientName.length() < 16;
         assert !main.clientName.contains(" ");
 
-        try {
-            ZeroMQ.start();
-        } catch (ChessError e) {
-            System.out.println(e.getMessage());
-            System.exit(-1);
-        }
+        ZeroMQ.start();
     }
 }

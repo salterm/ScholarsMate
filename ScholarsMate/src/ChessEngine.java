@@ -8,7 +8,6 @@
 import java.util.*;
 
 public class ChessEngine {
-
     //Evaluation heuristic values
     private static final int pawnValue = 100;
     private static final int rookValue = 500;
@@ -19,8 +18,7 @@ public class ChessEngine {
 
     private static final int infinity = 100000000;
 
-    private static final int tournamentStartingDuration = 10000000;
-    private static int tournamentDuration = tournamentStartingDuration;
+    private static final int tournamentDepth = 4;
 
     //Game rules
     public static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
@@ -50,7 +48,6 @@ public class ChessEngine {
         gameState.setBoard(startingBoard);
         gameState.setMoveNumber(startingMove);
         gameState.setIsWhitesPly(startingIsWhitesPly);
-        tournamentDuration = tournamentStartingDuration;
     }
 
     /**
@@ -261,7 +258,6 @@ public class ChessEngine {
      * @return the eval score.
      */
     public static int eval() {
-        // with reference to the state of the game, return the the evaluation score of the side on move - note that positive means an advantage while negative means a disadvantage
         int eval = 0;
         int pieceEval = 0;
         for (char[] ca : gameState.getBoard()) {
@@ -667,9 +663,11 @@ public class ChessEngine {
      * @param charIn The move in question.
      */
     public static void move(String charIn) {
-        Move m = new Move(charIn, gameState);
-        historyStack.push(m);
-        gameState.move(m);
+        if (charIn != null && !charIn.isEmpty()) {
+            Move m = new Move(charIn, gameState);
+            historyStack.push(m);
+            gameState.move(m);
+        }
     }
 
     /**
@@ -697,28 +695,28 @@ public class ChessEngine {
     /**
      * Evaluates valid moves using an adversary search bounded by depth and duration, performs the move with the highest eval score, and returns it as a string.
      *
-     * @param depth    How deep the adversary search tree should be.
-     * @param duration How much time is left to perform the search (-1 indicates "Tournament Mode", meaning a preset duration will be used)
+     * @param depth    How deep the adversary search tree should be. (-1 indicates "Tournament Mode", meaning duration will be used)
+     * @param duration How much time is left to perform the search. (Ignored unless in "Tournament Mode".)
      * @return The performed move as a string.
      */
     public static String moveNegamax(int depth, int duration) {
         //TODO Iterative deepening;
         String bestMove = "";
         int highestScore = -infinity;
-        int temp = 0;
+        int tempScore = 0;
 
-        if (duration == -1) {
-            duration = tournamentDuration;
+        if (depth == -1) {
+            depth = tournamentDepth;
         }
 
         for (String move : movesShuffled()) {
             move(move);
-            temp = -negamax(depth - 1, duration);
+            tempScore = -negamax(depth - 1);
             undo();
 
-            if (temp > highestScore) {
+            if (tempScore > highestScore) {
                 bestMove = move;
-                highestScore = temp;
+                highestScore = tempScore;
             }
         }
 
@@ -729,20 +727,19 @@ public class ChessEngine {
     /**
      * Performs negamax adversary search and returns eval score at top node level.
      *
-     * @param depth    How deep the adversary search tree should be.
-     * @param duration How much time is left to perform the search.
+     * @param depth How deep the adversary search tree should be.
      * @return The eval score at the top node level.
      */
-    private static int negamax(int depth, int duration) {
+    private static int negamax(int depth) {
         //TODO Iterative deepening;
-        if (depth == 0 || winner() != '?' || duration <= 0) {
+        if (depth == 0 || winner() != '?') {
             return eval();
         }
 
         int score = -infinity;
         for (String move : movesShuffled()) {
             move(move);
-            score = Integer.max(score, -negamax(depth - 1, duration));
+            score = Integer.max(score, -negamax(depth - 1));
             undo();
         }
 
@@ -752,8 +749,8 @@ public class ChessEngine {
     /**
      * Evaluates valid moves using an adversary search bounded by depth and duration, performs the move with the highest eval score, and returns it as a string. Utilizes alpha beta search tree pruning.
      *
-     * @param depth    How deep the adversary search tree should be.
-     * @param duration How much time is left to perform the search (-1 indicates "Tournament Mode", meaning a preset duration will be used)
+     * @param depth    How deep the adversary search tree should be. (-1 indicates "Tournament Mode", meaning duration will be used)
+     * @param duration How much time is left to perform the search. (Ignored unless in "Tournament Mode".)
      * @return The performed move as a string.
      */
     public static String moveAlphabeta(int depth, int duration) {
@@ -761,37 +758,37 @@ public class ChessEngine {
         String bestMove = "";
         int alpha = -infinity;
         int beta = -infinity;
-        int temp = 0;
+        int tempScore = 0;
 
-        if (duration == -1) {
-            duration = tournamentDuration;
+        if (depth == -1) {
+            depth = tournamentDepth;
         }
 
         for (String move : movesShuffled()) {
             move(move);
-            temp = -alphabeta(depth - 1, -beta, -alpha, duration);
+            tempScore = -alphabeta(depth - 1, -beta, -alpha);
             undo();
 
-            if (temp > alpha) {
+            if (tempScore > alpha) {
                 bestMove = move;
-                alpha = temp;
+                alpha = tempScore;
             }
         }
 
+        move(bestMove);
         return bestMove;
     }
 
     /**
      * Performs negamax adversary search and returns eval score at top node level, utilizing alpha beta pruning.
      *
-     * @param depth    How deep the adversary search tree should be.
-     * @param alpha    alpha
-     * @param beta     beta
-     * @param duration How much time is left to perform the search (-1 indicates "Tournament Mode", meaning a preset duration will be used)
+     * @param depth How deep the adversary search tree should be.
+     * @param alpha alpha
+     * @param beta  beta
      * @return The eval score at the top node level.
      */
-    private static int alphabeta(int depth, int alpha, int beta, int duration) {
-        if (depth == 0 || winner() != '?' || duration <= 0) {
+    private static int alphabeta(int depth, int alpha, int beta) {
+        if (depth == 0 || winner() != '?') {
             return eval();
         }
 
@@ -799,7 +796,7 @@ public class ChessEngine {
 
         for (String move : movesShuffled()) {
             move(move);
-            score = Integer.max(score, -alphabeta(depth - 1, -beta, -alpha, duration));
+            score = Integer.max(score, -alphabeta(depth - 1, -beta, -alpha));
             undo();
 
             alpha = Integer.max(alpha, score);
