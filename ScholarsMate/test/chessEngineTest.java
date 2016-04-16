@@ -1483,6 +1483,509 @@ public class chessEngineTest {
         assertEquals(ChessEngine.boardGet(), "19 B\n.k..r\npbppp\n.....\n.P..B\n.p.KP\n.....\n");
     }
 
+    @Test
+    public void undo() throws Exception {
+        ChessEngine.reset();
+        ChessEngine.move("b2-b3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "1 W\nkqbnr\nppppp\n.....\n.....\nPPPPP\nRNBQK\n");
+
+        ChessEngine.boardSet("16 B\n.kQr.\n...p.\nQ.pq.\n.pn.B\nP..KP\nR....\n");
+        ChessEngine.move("c3-d1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "16 B\n.kQr.\n...p.\nQ.pq.\n.pn.B\nP..KP\nR....\n");
+
+        ChessEngine.boardSet("17 W\n..qn.\np.B.r\n.kN.p\n.....\nPP.pP\n..RK.\n");
+        ChessEngine.move("c4-d2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 W\n..qn.\np.B.r\n.kN.p\n.....\nPP.pP\n..RK.\n");
+
+        ChessEngine.boardSet("15 W\n.qQ..\npkp..\nP.n.r\n.P...\n.pP.P\n..B.K\n");
+        ChessEngine.move("c1-b1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "15 W\n.qQ..\npkp..\nP.n.r\n.P...\n.pP.P\n..B.K\n");
+
+        ChessEngine.boardSet("11 B\nk.Qbr\n.....\n..pp.\nn.pPp\nP.P.P\n.R.QK\n");
+        ChessEngine.move("a3-b5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "11 B\nk.Qbr\n.....\n..pp.\nn.pPp\nP.P.P\n.R.QK\n");
+
+        ChessEngine.boardSet("19 B\n...br\n..p.p\nq....\n.P.kK\n....P\n.R...\n");
+        ChessEngine.move("a4-a3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "19 B\n...br\n..p.p\nq....\n.P.kK\n....P\n.R...\n");
+
+        ChessEngine.boardSet("16 B\n.B.r.\nq.p.p\n...N.\n..k.P\nPpPn.\n...RK\n");
+        ChessEngine.move("c3-c4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "16 B\n.B.r.\nq.p.p\n...N.\n..k.P\nPpPn.\n...RK\n");
+
+        ChessEngine.boardSet("20 W\n.k..r\np..p.\n...bp\n.pP.q\nRQn.P\n..B.K\n");
+        ChessEngine.move("e1-d2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 W\n.k..r\np..p.\n...bp\n.pP.q\nRQn.P\n..B.K\n");
+
+        ChessEngine.boardSet("16 B\nkq.n.\nQp.r.\n...p.\nB.bpP\nP.P..\nRN.K.\n");
+        ChessEngine.move("d4-e3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "16 B\nkq.n.\nQp.r.\n...p.\nB.bpP\nP.P..\nRN.K.\n");
+
+        ChessEngine.boardSet("12 W\nk.b.r\n.p...\np.n.p\n.PpPQ\nP....\nR..BK\n");
+        ChessEngine.move("d3-d4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 W\nk.b.r\n.p...\np.n.p\n.PpPQ\nP....\nR..BK\n");
+
+        ChessEngine.boardSet("12 W\nk....\nqp..r\n.pNpp\npb.P.\nP.PKP\n.R.Q.\n");
+        ChessEngine.move("b1-c1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 W\nk....\nqp..r\n.pNpp\npb.P.\nP.PKP\n.R.Q.\n");
+
+        ChessEngine.boardSet("18 B\n.kb.r\n....p\n.pP..\n.Pp..\n...QP\n..R.K\n");
+        ChessEngine.move("b6-a6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 B\n.kb.r\n....p\n.pP..\n.Pp..\n...QP\n..R.K\n");
+
+        ChessEngine.boardSet("12 B\n.b.nr\nk....\n.p...\nN.PPq\nPp...\nR.Q.K\n");
+        ChessEngine.move("b6-a6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 B\n.b.nr\nk....\n.p...\nN.PPq\nPp...\nR.Q.K\n");
+
+        ChessEngine.boardSet("11 B\nk..Nr\n.ppbp\np....\nP..B.\n..PQP\nR...K\n");
+        ChessEngine.move("c5-c4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "11 B\nk..Nr\n.ppbp\np....\nP..B.\n..PQP\nR...K\n");
+
+        ChessEngine.boardSet("20 W\n....b\n..k..\n.rp.P\nPNP..\n....P\nR.K..\n");
+        ChessEngine.move("a1-b1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 W\n....b\n..k..\n.rp.P\nPNP..\n....P\nR.K..\n");
+
+        ChessEngine.boardSet("13 B\n...r.\n.k.pp\n.pp.n\nP..q.\nRNPPP\nB..QK\n");
+        ChessEngine.move("b5-c6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "13 B\n...r.\n.k.pp\n.pp.n\nP..q.\nRNPPP\nB..QK\n");
+
+        ChessEngine.boardSet("18 W\n...nB\n.k.P.\n.R...\n....b\nP.qP.\n....K\n");
+        ChessEngine.move("b4-b2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\n...nB\n.k.P.\n.R...\n....b\nP.qP.\n....K\n");
+
+        ChessEngine.boardSet("17 B\nk....\n.Nb..\npPp.r\n.qBpP\nP..Q.\n...K.\n");
+        ChessEngine.move("b3-c2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 B\nk....\n.Nb..\npPp.r\n.qBpP\nP..Q.\n...K.\n");
+
+        ChessEngine.boardSet("18 W\nkr...\nb.P..\n.N.pn\np.Q.P\nRPP..\n..B.K\n");
+        ChessEngine.move("e1-d2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\nkr...\nb.P..\n.N.pn\np.Q.P\nRPP..\n..B.K\n");
+
+        ChessEngine.boardSet("15 W\n.b.r.\n.p.Pp\np.kP.\nP...Q\n.P..P\nR..BK\n");
+        ChessEngine.move("d1-a4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "15 W\n.b.r.\n.p.Pp\np.kP.\nP...Q\n.P..P\nR..BK\n");
+
+        ChessEngine.boardSet("20 W\n..br.\n.p.p.\np.Pp.\n....p\n.kRK.\n.N...\n");
+        ChessEngine.move("c4-b5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 W\n..br.\n.p.p.\np.Pp.\n....p\n.kRK.\n.N...\n");
+
+        ChessEngine.boardSet("13 B\nkNb..\nq.p..\nBpnrp\nP..Pp\n.P.QK\n..R..\n");
+        ChessEngine.move("c6-d6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "13 B\nkNb..\nq.p..\nBpnrp\nP..Pp\n.P.QK\n..R..\n");
+
+        ChessEngine.boardSet("18 W\nk....\np....\nP....\n.P.Q.\n.nNK.\nq....\n");
+        ChessEngine.move("d3-a6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\nk....\np....\nP....\n.P.Q.\n.nNK.\nq....\n");
+
+        ChessEngine.boardSet("12 B\nkq..r\npp.b.\nP..p.\n..BpP\n.Pp..\n.NQ.K\n");
+        ChessEngine.move("e6-e5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 B\nkq..r\npp.b.\nP..p.\n..BpP\n.Pp..\n.NQ.K\n");
+
+        ChessEngine.boardSet("14 W\nq.br.\nB.ppp\nP.P..\n...PP\n.....\n.R.kK\n");
+        ChessEngine.move("b1-b5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 W\nq.br.\nB.ppp\nP.P..\n...PP\n.....\n.R.kK\n");
+
+        ChessEngine.boardSet("11 B\nk...r\nqp...\np.b.p\n.P...\nPBPnK\nR...Q\n");
+        ChessEngine.move("e6-e5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "11 B\nk...r\nqp...\np.b.p\n.P...\nPBPnK\nR...Q\n");
+
+        ChessEngine.boardSet("14 W\n.q.r.\n.k...\n.pppp\nPnP..\n.P...\nRN.BK\n");
+        ChessEngine.move("a1-a2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 W\n.q.r.\n.k...\n.pppp\nPnP..\n.P...\nRN.BK\n");
+
+        ChessEngine.boardSet("17 B\nk..q.\npppN.\n..r..\n...p.\nP..PP\nR.Q.K\n");
+        ChessEngine.move("d3-e2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 B\nk..q.\npppN.\n..r..\n...p.\nP..PP\nR.Q.K\n");
+
+        ChessEngine.boardSet("12 W\nk.br.\np.ppp\n..p.P\n.Pq..\nP....\nQ...K\n");
+        ChessEngine.move("e1-d1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 W\nk.br.\np.ppp\n..p.P\n.Pq..\nP....\nQ...K\n");
+
+        ChessEngine.boardSet("18 W\n.kq.r\n.NB.Q\n.p...\np.bPp\n.PP.P\n..R.K\n");
+        ChessEngine.move("b2-c3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\n.kq.r\n.NB.Q\n.p...\np.bPp\n.PP.P\n..R.K\n");
+
+        ChessEngine.boardSet("17 B\nk....\np...p\n.P.r.\n..NqP\nRP..K\n...q.\n");
+        ChessEngine.move("d4-c4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 B\nk....\np...p\n.P.r.\n..NqP\nRP..K\n...q.\n");
+
+        ChessEngine.boardSet("12 W\nk..n.\npp...\nP.p.r\n..b.P\nRP...\n.N.QK\n");
+        ChessEngine.move("a4-b5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 W\nk..n.\npp...\nP.p.r\n..b.P\nRP...\n.N.QK\n");
+
+        ChessEngine.boardSet("14 W\n...nr\nqkp..\npp.bP\n.P...\nPQP.P\n.RB.K\n");
+        ChessEngine.move("a2-a3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 W\n...nr\nqkp..\npp.bP\n.P...\nPQP.P\n.RB.K\n");
+
+        ChessEngine.boardSet("18 W\nk..Q.\nq...p\npQb..\nP....\n.n.N.\nR.B.K\n");
+        ChessEngine.move("d6-c5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\nk..Q.\nq...p\npQb..\nP....\n.n.N.\nR.B.K\n");
+
+        ChessEngine.boardSet("14 W\nk.r..\n.p.pq\nn.Q..\nP.P..\n..BPP\nR..K.\n");
+        ChessEngine.move("a1-a2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 W\nk.r..\n.p.pq\nn.Q..\nP.P..\n..BPP\nR..K.\n");
+
+        ChessEngine.boardSet("19 W\n...k.\n..bpB\np.q..\np...p\nP.P.P\n.Q.K.\n");
+        ChessEngine.move("b1-b6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "19 W\n...k.\n..bpB\np.q..\np...p\nP.P.P\n.Q.K.\n");
+
+        ChessEngine.boardSet("15 W\n.k...\npqp.b\nQ...p\n....B\nNP..P\n.R..K\n");
+        ChessEngine.move("e1-d1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "15 W\n.k...\npqp.b\nQ...p\n....B\nNP..P\n.R..K\n");
+
+        ChessEngine.boardSet("20 W\nkq.nr\n..p..\nb.Pp.\n..NP.\npBQ.P\n...K.\n");
+        ChessEngine.move("b2-c1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 W\nkq.nr\n..p..\nb.Pp.\n..NP.\npBQ.P\n...K.\n");
+
+        ChessEngine.boardSet("20 B\n..kb.\n...pr\n.pN.p\n.....\n...P.\n...KQ\n");
+        ChessEngine.move("d5-c4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 B\n..kb.\n...pr\n.pN.p\n.....\n...P.\n...KQ\n");
+
+        ChessEngine.boardSet("14 B\nk....\n..r..\n..pPp\n....P\nPP..P\nRBK..\n");
+        ChessEngine.move("c5-c6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 B\nk....\n..r..\n..pPp\n....P\nPP..P\nRBK..\n");
+
+        ChessEngine.boardSet("19 B\nk..nr\n...P.\npp.Kp\nNP...\nP.qb.\n..B..\n");
+        ChessEngine.move("d2-c3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "19 B\nk..nr\n...P.\npp.Kp\nNP...\nP.qb.\n..B..\n");
+
+        ChessEngine.boardSet("18 W\nk...r\n....Q\np.n.b\nPp..P\nRPpK.\nB....\n");
+        ChessEngine.move("d2-d3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\nk...r\n....Q\np.n.b\nPp..P\nRPpK.\nB....\n");
+
+        ChessEngine.boardSet("19 W\n.N...\npP...\n.k.p.\n.PQ.n\nB...r\nR..K.\n");
+        ChessEngine.move("c3-c5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "19 W\n.N...\npP...\n.k.p.\n.PQ.n\nB...r\nR..K.\n");
+
+        ChessEngine.boardSet("17 B\nk..n.\n.p..r\np.bB.\n.....\nP.P.K\nRN...\n");
+        ChessEngine.move("c4-a2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 B\nk..n.\n.p..r\np.bB.\n.....\nP.P.K\nRN...\n");
+
+        ChessEngine.boardSet("18 W\n..b.r\nkBQ.p\n.....\nnP.PP\nP..P.\n.R..K\n");
+        ChessEngine.move("b5-c6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\n..b.r\nkBQ.p\n.....\nnP.PP\nP..P.\n.R..K\n");
+
+        ChessEngine.boardSet("13 B\n...n.\n..p.b\n.Q.pr\nPkp.p\n.PBPP\n.R.K.\n");
+        ChessEngine.move("b3-a2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "13 B\n...n.\n..p.b\n.Q.pr\nPkp.p\n.PBPP\n.R.K.\n");
+
+        ChessEngine.boardSet("17 W\nk....\nppq.N\n..nP.\nP....\n.....\n..RK.\n");
+        ChessEngine.move("c1-c3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 W\nk....\nppq.N\n..nP.\nP....\n.....\n..RK.\n");
+
+        ChessEngine.boardSet("18 W\nk....\nqp..r\npbBpn\nPPP.N\n...PQ\n...RK\n");
+        ChessEngine.move("c4-b5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\nk....\nqp..r\npbBpn\nPPP.N\n...PQ\n...RK\n");
+
+        ChessEngine.boardSet("20 B\n.....\nkr...\n.PPN.\n..R..\n....P\n...K.\n");
+        ChessEngine.move("a5-b6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 B\n.....\nkr...\n.PPN.\n..R..\n....P\n...K.\n");
+
+        ChessEngine.boardSet("14 B\n.Q.r.\npnPb.\n.p..P\n.Pk.K\nP.PB.\nRN...\n");
+        ChessEngine.move("c3-c4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 B\n.Q.r.\npnPb.\n.p..P\n.Pk.K\nP.PB.\nRN...\n");
+
+        ChessEngine.boardSet("12 B\nk.br.\n.p.p.\nq.n..\n...p.\nP.QNP\n.RB.K\n");
+        ChessEngine.move("a4-b3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 B\nk.br.\n.p.p.\nq.n..\n...p.\nP.QNP\n.RB.K\n");
+
+        ChessEngine.boardSet("19 B\n.q...\nk...r\n.p...\n.Q..K\nPp...\nRn...\n");
+        ChessEngine.move("e5-e6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "19 B\n.q...\nk...r\n.p...\n.Q..K\nPp...\nRn...\n");
+
+        ChessEngine.boardSet("12 B\n....r\n.kqpp\nb.p..\n..nQP\n..PP.\nBq..K\n");
+        ChessEngine.move("c3-a2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 B\n....r\n.kqpp\nb.p..\n..nQP\n..PP.\nBq..K\n");
+
+        ChessEngine.boardSet("18 W\n...nr\np.kpp\n.....\nNPP.P\n.Q.K.\n.R.b.\n");
+        ChessEngine.move("b2-c2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\n...nr\np.kpp\n.....\nNPP.P\n.Q.K.\n.R.b.\n");
+
+        ChessEngine.boardSet("14 W\nq.br.\n....p\n.Pkp.\np.PQP\nP.P..\nRB.K.\n");
+        ChessEngine.move("d1-e1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 W\nq.br.\n....p\n.Pkp.\np.PQP\nP.P..\nRB.K.\n");
+
+        ChessEngine.boardSet("15 B\nk..br\nRp..N\n.P.p.\n...p.\n....q\n.B.QK\n");
+        ChessEngine.move("e2-b2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "15 B\nk..br\nRp..N\n.P.p.\n...p.\n....q\n.B.QK\n");
+
+        ChessEngine.boardSet("18 W\n...br\n....p\nk..pp\nP..K.\n...nQ\nRq...\n");
+        ChessEngine.move("e2-d2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\n...br\n....p\nk..pp\nP..K.\n...nQ\nRq...\n");
+
+        ChessEngine.boardSet("14 B\nk.r..\nq...p\nn.p..\n.b.P.\nPPPBP\nR..QK\n");
+        ChessEngine.move("c6-c5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 B\nk.r..\nq...p\nn.p..\n.b.P.\nPPPBP\nR..QK\n");
+
+        ChessEngine.boardSet("17 W\nkQbn.\np..p.\n...P.\n.....\nRBP.K\n.N...\n");
+        ChessEngine.move("b6-a6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 W\nkQbn.\np..p.\n...P.\n.....\nRBP.K\n.N...\n");
+
+        ChessEngine.boardSet("18 W\nk.br.\n....p\n.PPpP\np....\n.nPP.\n.R.K.\n");
+        ChessEngine.move("d1-e1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\nk.br.\n....p\n.PPpP\np....\n.nPP.\n.R.K.\n");
+
+        ChessEngine.boardSet("13 B\n.kqr.\np.p..\n.pPQp\nP....\n.PP.K\n.RB..\n");
+        ChessEngine.move("d6-d5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "13 B\n.kqr.\np.p..\n.pPQp\nP....\n.PP.K\n.RB..\n");
+
+        ChessEngine.boardSet("14 B\n..bn.\np.p.r\n..PPp\n...QK\n.k...\n.R...\n");
+        ChessEngine.move("c6-d5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 B\n..bn.\np.p.r\n..PPp\n...QK\n.k...\n.R...\n");
+
+        ChessEngine.boardSet("11 B\n..b.r\nNQppp\n..k.P\nP....\n.PBP.\nR...K\n");
+        ChessEngine.move("c4-d4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "11 B\n..b.r\nNQppp\n..k.P\nP....\n.PBP.\nR...K\n");
+
+        ChessEngine.boardSet("12 B\n.k..r\npPpQb\n....p\n.P..P\n..P.P\n....K\n");
+        ChessEngine.move("e5-d4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 B\n.k..r\npPpQb\n....p\n.P..P\n..P.P\n....K\n");
+
+        ChessEngine.boardSet("12 B\nkb..r\np.pBp\n....n\nP..PP\n..N..\nR..QK\n");
+        ChessEngine.move("c5-c4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 B\nkb..r\np.pBp\n....n\nP..PP\n..N..\nR..QK\n");
+
+        ChessEngine.boardSet("17 B\nk...r\np..P.\nb.Ppp\nR.N.q\n....B\n...K.\n");
+        ChessEngine.move("a4-c6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 B\nk...r\np..P.\nb.Ppp\nR.N.q\n....B\n...K.\n");
+
+        ChessEngine.boardSet("14 W\n..Nnr\n.kp.Q\n.p...\n..PP.\nqP.B.\nR...K\n");
+        ChessEngine.move("e5-e4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 W\n..Nnr\n.kp.Q\n.p...\n..PP.\nqP.B.\nR...K\n");
+
+        ChessEngine.boardSet("15 W\nk....\npnp.r\nP.bq.\n..pP.\n....P\nRB.K.\n");
+        ChessEngine.move("a1-a3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "15 W\nk....\npnp.r\nP.bq.\n..pP.\n....P\nRB.K.\n");
+
+        ChessEngine.boardSet("14 B\n.kb.r\n..pp.\n..pBp\nPQP..\n....P\nR..K.\n");
+        ChessEngine.move("e4-e3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 B\n.kb.r\n..pp.\n..pBp\nPQP..\n....P\nR..K.\n");
+
+        ChessEngine.boardSet("17 W\nbk...\n...p.\npppPK\nBP...\nP.P..\nRN...\n");
+        ChessEngine.move("b3-a4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 W\nbk...\n...p.\npppPK\nBP...\nP.P..\nRN...\n");
+
+        ChessEngine.boardSet("16 W\nkNbnr\n..pp.\npp..p\n....P\nRqK..\n..B..\n");
+        ChessEngine.move("a2-a1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "16 W\nkNbnr\n..pp.\npp..p\n....P\nRqK..\n..B..\n");
+
+        ChessEngine.boardSet("12 W\nkq..r\n.n...\nPpppp\nNp..Q\nRBP.b\n....K\n");
+        ChessEngine.move("c2-c3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 W\nkq..r\n.n...\nPpppp\nNp..Q\nRBP.b\n....K\n");
+
+        ChessEngine.boardSet("15 B\nk...r\n...b.\nppn..\n.P..B\nP.QPK\nR....\n");
+        ChessEngine.move("d5-c6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "15 B\nk...r\n...b.\nppn..\n.P..B\nP.QPK\nR....\n");
+
+        ChessEngine.boardSet("19 W\n.....\n.pB.p\n..k..\nN....\nP.Qrq\nR...K\n");
+        ChessEngine.move("c2-d2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "19 W\n.....\n.pB.p\n..k..\nN....\nP.Qrq\nR...K\n");
+
+        ChessEngine.boardSet("19 W\nk..r.\n...pp\nP.b.P\nN.P..\nPRB.n\n....K\n");
+        ChessEngine.move("b2-b6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "19 W\nk..r.\n...pp\nP.b.P\nN.P..\nPRB.n\n....K\n");
+
+        ChessEngine.boardSet("12 B\nk.bnr\n..Pp.\n....p\nP.N.P\n..p.B\n...K.\n");
+        ChessEngine.move("a6-a5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 B\nk.bnr\n..Pp.\n....p\nP.N.P\n..p.B\n...K.\n");
+
+        ChessEngine.boardSet("15 B\nkq...\np.bp.\n.qp.N\n...K.\nP...P\nR..Q.\n");
+        ChessEngine.move("b6-b5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "15 B\nkq...\np.bp.\n.qp.N\n...K.\nP...P\nR..Q.\n");
+
+        ChessEngine.boardSet("13 B\n...nr\n.kPbp\np.Pp.\n.P...\n.....\nRN.BK\n");
+        ChessEngine.move("b5-a6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "13 B\n...nr\n.kPbp\np.Pp.\n.P...\n.....\nRN.BK\n");
+
+        ChessEngine.boardSet("16 W\n...br\n..kpp\nq..Kn\nPPpPP\n.....\n.RBQ.\n");
+        ChessEngine.move("b1-a1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "16 W\n...br\n..kpp\nq..Kn\nPPpPP\n.....\n.RBQ.\n");
+
+        ChessEngine.boardSet("12 W\n.k.Qr\n..b.q\nppP.p\n....P\nPPP..\nR..BK\n");
+        ChessEngine.move("a2-a3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 W\n.k.Qr\n..b.q\nppP.p\n....P\nPPP..\nR..BK\n");
+
+        ChessEngine.boardSet("15 W\nk..br\n..p.p\npqP..\n.P.p.\nP..nP\nB.R.K\n");
+        ChessEngine.move("e1-d2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "15 W\nk..br\n..p.p\npqP..\n.P.p.\nP..nP\nB.R.K\n");
+
+        ChessEngine.boardSet("18 W\nk..qr\nppBbp\n..n..\n..Q.P\nPP.NK\n...R.\n");
+        ChessEngine.move("d2-e4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\nk..qr\nppBbp\n..n..\n..Q.P\nPP.NK\n...R.\n");
+
+        ChessEngine.boardSet("13 W\n....r\nk..bp\nPNn..\nP....\n.BPP.\n.R.qK\n");
+        ChessEngine.move("c2-c3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "13 W\n....r\nk..bp\nPNn..\nP....\n.BPP.\n.R.qK\n");
+
+        ChessEngine.boardSet("18 B\nk.b.r\n....p\np..p.\nP.B.P\n....q\nn..K.\n");
+        ChessEngine.move("e2-c2");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 B\nk.b.r\n....p\np..p.\nP.B.P\n....q\nn..K.\n");
+
+        ChessEngine.boardSet("15 W\n...kr\nq...p\n.pQpP\npP...\n..P.B\nRN.K.\n");
+        ChessEngine.move("d1-c1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "15 W\n...kr\nq...p\n.pQpP\npP...\n..P.B\nRN.K.\n");
+
+        ChessEngine.boardSet("19 W\n.k.nr\nq.p.p\np.b..\np.PBP\nPP...\n..R.K\n");
+        ChessEngine.move("d3-e4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "19 W\n.k.nr\nq.p.p\np.b..\np.PBP\nPP...\n..R.K\n");
+
+        ChessEngine.boardSet("14 B\n..bnr\n..k.p\nqQpP.\nK..P.\nPpP.B\n.R...\n");
+        ChessEngine.move("a4-b4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "14 B\n..bnr\n..k.p\nqQpP.\nK..P.\nPpP.B\n.R...\n");
+
+        ChessEngine.boardSet("20 B\n..n.r\n..k.p\n.pb..\n....P\nP.BP.\nR...K\n");
+        ChessEngine.move("c5-b6");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 B\n..n.r\n..k.p\n.pb..\n....P\nP.BP.\nR...K\n");
+
+        ChessEngine.boardSet("20 W\n.....\nppkp.\nb....\nN...K\n.PQ..\n..R..\n");
+        ChessEngine.move("c2-e4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 W\n.....\nppkp.\nb....\nN...K\n.PQ..\n..R..\n");
+
+        ChessEngine.boardSet("16 B\nkr...\nQ....\nN.qp.\n.p..K\nP..RP\n.b...\n");
+        ChessEngine.move("c4-c5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "16 B\nkr...\nQ....\nN.qp.\n.p..K\nP..RP\n.b...\n");
+
+        ChessEngine.boardSet("18 B\n..bnr\n..kp.\np..P.\n.pP..\n...Kp\n..RQ.\n");
+        ChessEngine.move("c5-b4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 B\n..bnr\n..kp.\np..P.\n.pP..\n...Kp\n..RQ.\n");
+
+        ChessEngine.boardSet("20 W\nk..b.\n..p..\nqp.np\nPBQ.P\nP..pK\nRN...\n");
+        ChessEngine.move("c3-c4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 W\nk..b.\n..p..\nqp.np\nPBQ.P\nP..pK\nRN...\n");
+
+        ChessEngine.boardSet("17 W\n..br.\nk..pp\n..p.N\nqpPPP\nR....\nQ...K\n");
+        ChessEngine.move("a1-b1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "17 W\n..br.\nk..pp\n..p.N\nqpPPP\nR....\nQ...K\n");
+
+        ChessEngine.boardSet("21 W\nk...r\np.q.p\n.Q..n\n.PpPp\n.RP..\n....K\n");
+        ChessEngine.move("d3-d4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "21 W\nk...r\np.q.p\n.Q..n\n.PpPp\n.RP..\n....K\n");
+
+        ChessEngine.boardSet("12 W\n....q\npkppr\n.p..p\nP.N.Q\nb.PPK\nR.B..\n");
+        ChessEngine.move("c1-d1");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "12 W\n....q\npkppr\n.p..p\nP.N.Q\nb.PPK\nR.B..\n");
+
+        ChessEngine.boardSet("13 B\n...b.\n..p.r\n..kpp\nq.PPP\nRP.BK\n.NQ..\n");
+        ChessEngine.move("c4-c3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "13 B\n...b.\n..p.r\n..kpp\nq.PPP\nRP.BK\n.NQ..\n");
+
+        ChessEngine.boardSet("18 W\nkq.br\npB...\nnp.Pp\n....p\n.RPK.\n.....\n");
+        ChessEngine.move("c2-c3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\nkq.br\npB...\nnp.Pp\n....p\n.RPK.\n.....\n");
+
+        ChessEngine.boardSet("18 W\nb...r\npk...\n.Pnpp\nBP..P\nP.R.K\n.....\n");
+        ChessEngine.move("e2-d3");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "18 W\nb...r\npk...\n.Pnpp\nBP..P\nP.R.K\n.....\n");
+
+        ChessEngine.boardSet("11 B\n.qbnr\n.k.P.\n.Pp.p\nQ...P\nNP.P.\n.RB.K\n");
+        ChessEngine.move("c6-c5");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "11 B\n.qbnr\n.k.P.\n.Pp.p\nQ...P\nNP.P.\n.RB.K\n");
+
+        ChessEngine.boardSet("20 W\nk..br\n.p.Qp\n.P...\n....q\nPpK.p\n.nR..\n");
+        ChessEngine.move("d5-e4");
+        ChessEngine.undo();
+        assertEquals(ChessEngine.boardGet(), "20 W\nk..br\n.p.Qp\n.P...\n....q\nPpK.p\n.nR..\n");
+    }
+
     private int movesCount(Vector<String> stringVector) {
         int intEqual = 0;
         int intCount = stringVector.size();
@@ -2129,527 +2632,747 @@ public class chessEngineTest {
         assertTrue(movesOrder(ChessEngine.movesEvaluated()));
     }
 
+    private int test_moveCount(Vector<String> charBuffer) {
+        int intEqual = 0;
+        Vector<String> charEqual = new Vector<>();
+
+        for (String s : charBuffer) {
+            if (!charEqual.contains(s)) {
+                intEqual++;
+                charEqual.add(s);
+            }
+        }
+
+        return intEqual;
+    }
+
     @Test
     public void moveRandom() throws Exception {
+        Vector<String> charBuffer = new Vector<>();
 
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.reset();
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 2);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("17 W\n.k.nr\n.bppp\np...P\n.PP..\nP...K\n.RB.Q\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 W\nkb.n.\np...q\n..ppp\npNP.P\n.P.BK\nR....\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("21 W\nk...r\nppp..\n.q.b.\nPP.BP\nQ....\nR..K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 W\n.kbr.\n.p..p\n.....\nP..QP\n.q.PK\n.R.B.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("14 W\nkq..r\n.np..\np.Pbp\nB..Pp\nPP...\nRNQ.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("15 B\nk..br\npNp.p\nP...q\n.PP.K\nB....\n..RQ.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 B\nk.r..\n.Qb.p\np...n\np.ppP\nP....\n.R..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 B\n.qknr\n..p.p\npBP.p\n.P...\nP....\nRNQ.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 B\nk.Q..\np..Np\n....b\n.PprP\nP....\n.Rn.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("17 B\nk..n.\np.Ppr\n...QP\n....P\n.PP..\nqB..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("17 W\nkN...\np...p\n.pnp.\n.B.P.\n....P\nRQq.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("14 B\nkb.n.\nqp.pr\npPp.p\nP...P\nB..PK\nRN.Q.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 2);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 B\nk....\nP.q.p\n.PbrP\n..nP.\nR.Q..\n.N.K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 9);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("19 B\n.k..r\np.p.p\n.....\nR....\n.PBqn\n..Q.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("15 W\nk....\n..r..\np.R.p\n....b\n..PN.\n..BnK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("17 W\n.b.nr\np.p.p\n..PkP\n.P..K\np.P..\nR.B..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 W\n....r\n.Pp.p\n....K\nk..PP\n.n.Q.\nR..q.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 B\nkb..r\n..nQp\npP...\n....K\n..B..\n..q..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("15 W\n..br.\nqk.Q.\np....\nPpP.P\n...P.\nRN..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("11 B\n.b..r\nkq..p\nppQ.P\n..N..\npRPP.\n..B.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\nk...r\npq..p\nn.pb.\nNp.pP\nPPBPQ\n.R..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("19 B\nQ.kbr\n...pB\n..pq.\n.p..P\nP....\nRn.K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("17 W\n...n.\nqppr.\np...b\nk.P.P\nRPB..\n.N.K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("11 B\nk...r\npqp.p\n..PpQ\n...PP\n.PB..\nR.N.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 W\nk.qnr\npp...\n..p.b\nP..Kp\n.PPP.\nRB.Q.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("11 B\nk...r\npp.bP\n...Pn\n.Pp..\n..P..\nRqB.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("16 W\n...q.\npkp.p\n...r.\n.PN.P\nP....\nR.KB.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 W\n..k.r\n....P\np..p.\n..P..\nb.p..\nR..K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 3);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 B\nk..qr\n...bp\nBN..n\npPpQ.\nP..P.\n...RK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("14 W\nkq..r\np.p..\nP....\nR.p..\nB.P.P\n...QK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\nk..r.\np.p.p\n.pP.q\nPbPBP\n...Q.\nR...K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 W\nkq.r.\n.pB..\n.p.pb\nn..p.\nPQP.K\nRN...\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("17 W\n...Q.\npk.pr\n.q...\n..p.P\nP...P\nRB.K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 B\n.k...\np.qp.\n..P..\n.PNK.\nb..B.\n....R\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 W\nkb..r\npp.qp\nN..BQ\nPp.P.\n.nP..\n...K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 B\n.r...\nk.p.p\npqP.P\n...p.\nP.NP.\n.R.BK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("11 B\n.qb..\nkPprp\np..p.\n.PQ.P\nP..Pn\nRNBK.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\n....r\n..pbp\nk..pn\np.KPP\n.Pp..\nRB.Q.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("16 B\nb...r\np...p\n..kP.\nN.Q..\nPP.n.\n.R..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("21 W\n...r.\n...pb\n...kp\nP.B.P\nq..P.\n..N.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\nq..r.\nkp..p\npB.b.\n...PP\nP...Q\nRN..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\nk...r\np..pp\n..q.n\nN..PK\nRP.B.\n.....\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 B\n..k..\npPp.r\n.P.Kb\n.....\n.BP..\n.R..Q\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 B\nkb.Q.\n.pp..\np..N.\n...KP\nP....\n.q.R.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\nk..nr\npb.p.\n....R\n.P.P.\n....P\n...QK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 W\nk.qb.\n.p.Nr\np.p.p\nPQP.P\n.P.K.\nR.B..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\n....r\nkbqpp\nppp..\nP.P.P\n.P...\nRNBQK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 W\n.k...\n....q\np.p..\nPpP..\n.P..P\nR..K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 2);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\nkqb.r\npQ..p\nnp...\n.....\nP.N.P\n.RB.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("21 W\n...b.\n..pp.\np..P.\n..P..\nk..pR\n..K..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("16 B\nk.br.\nBpp..\nq..pp\n.P.n.\nP.PP.\n.R.K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("16 B\n.q...\nkN.pb\np.PP.\np....\nP.P.P\n..RK.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("17 W\n....r\nk....\np.pP.\n....q\nPP.K.\nR.B..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("19 W\n..r..\nk..Bp\nQP.p.\n..P..\n...qK\nRN...\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 9);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 B\nk..nr\npp...\nP....\nR.b.p\n.PP..\nB..QK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("19 B\nQ....\n.k...\n.p..p\n.Rp.B\nP.P.P\n....K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 2);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 B\n.k..r\nq.p.p\n...pb\n.Q.P.\n...P.\nRB..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 B\nk.QN.\nq...p\n.....\np.pKP\n.B.b.\n.q...\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 9);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("21 W\n.k.r.\n.pp..\nq.R.p\nPbP..\nB...p\n....K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("11 B\n.Nb.r\np.p.p\n.k..B\n.....\npP.PP\n.RQ.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 W\n.k...\npb.q.\n.ppp.\n.P..K\nP.p..\n.RB.Q\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 W\nN.k.r\np...q\n.Q...\n....B\n.P..P\nR...K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 10);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("19 W\n.q...\nPR.Pr\np.pp.\nP..Q.\n....k\n....K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("17 B\n..b.r\nk.p.Q\np..p.\nP...P\nn.q.K\nB....\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 9);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 B\nk...Q\np.p.b\nP..p.\n....P\n.P...\n...K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 2);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("16 B\nkq..r\n....B\n.Pp.P\n.P.p.\n..Q.P\n...RK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 W\n...Q.\n..pp.\nkqb.n\n.....\n.P.QP\n.NB.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 W\n.k...\n.p.Kr\np.n.p\n..p..\n..P.P\nQ.b..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("16 W\nk....\n.qp.r\nP..pp\nn..PP\nRP...\n.NbBK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\n...r.\n..qbp\np.n..\nkPPP.\nP.Q..\nRB..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("19 B\n...n.\nk.Rp.\np..P.\nPp..r\np....\n...K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("16 W\n.k..r\nbp.Rp\n.n.p.\n...P.\n..P.P\n.NK..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("16 B\n.....\npPb.r\nkB.pp\nP....\n....P\nR...K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 B\nkq...\n..p..\nP..br\nP.p.P\n.n.N.\n.R.K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 B\n.....\nkbpp.\np...r\nRNP.p\n...Bn\n.Q..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 W\nkb..r\np...p\nqpppn\n.P..N\n..PPP\nBR.QK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("15 B\n.k.Nr\np...p\n.p...\nRp.p.\n.PQPP\n..K..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 3);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 W\n.....\n.k.r.\n..p.N\np.Q..\nPPP.P\nRB.K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("16 B\n.qbQ.\n.kp.P\np.n..\nPpP.P\n.P.r.\nR.B.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("19 W\nk...b\n...r.\nQp..p\nP...P\n..PpK\nRN...\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("15 B\nk.b.r\n.pnp.\n..p..\nPpP.Q\n..KN.\nR.B..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("19 W\nkn.r.\n.p.b.\np...p\n.BP.Q\n..P..\n....K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 B\n....r\nk...p\npq..P\nP.ppQ\n.P...\nRNBK.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("18 W\n....r\n.k..p\npP.b.\n.....\nqP..P\n.B..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 3);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 W\nk.b.r\np....\n.PN..\n.....\nR.Q.P\n.q..K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 9);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("11 B\nk..nr\nppQ.p\n...p.\nN..PB\nb...P\n..R.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("11 B\n.k.nr\n.N...\n.pppp\n...P.\nPQ..P\nR..BK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("20 W\nk..r.\n.K..P\n..p.P\n.b.P.\n.qN..\nRn...\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\n....r\npkpqp\nBP..n\nP.PpP\n....P\nRN.QK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("19 W\nb.knr\n..p..\np.p.p\nP.PK.\nRP.P.\n...Bq\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 4);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 W\n...nr\n..k.P\npQp.p\n.....\nPP.P.\nRNB.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("15 B\nk...r\n.bpp.\n...qp\nnPP.P\nP..P.\n...RK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 W\nqkbnr\n.....\nppNPp\n.Q.PB\nPP..P\n..R.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\n..br.\np.ppp\n.kn.P\nq.N..\nRP...\n.QB.K\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 B\nkq..r\n...p.\nppb.p\nP.Q..\n.RP.n\n...BK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 W\nk..br\nqnp..\np..QP\npP..P\nN.P.K\nR..B.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 8);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("13 W\nk..nr\np....\n..qQ.\np..P.\nPPbK.\nR.B..\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 7);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("15 W\nkr...\n.qP.p\n....P\n.....\n.n.NP\nR..K.\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 5);
+
+        for (int i = 0; i < 100; i++) {
+            ChessEngine.boardSet("12 W\n.qbn.\npkp.p\np.Nr.\nP.P..\n.P...\n..RQK\n");
+            charBuffer.add(ChessEngine.moveRandom());
+        }
+        assertFalse(test_moveCount(charBuffer) < 6);
     }
 
     @Test
     public void moveGreedy() throws Exception {
+        int intWon = 0;
+        int intLost = 0;
 
+        for (int i = 0; i < 50; i++) {
+            ChessEngine.reset();
+
+            do {
+                ChessEngine.moveGreedy();
+
+                if (ChessEngine.winner() != '?') {
+                    break;
+                }
+
+                ChessEngine.moveRandom();
+
+                if (ChessEngine.winner() != '?') {
+                    break;
+                }
+            } while (true);
+
+            if (ChessEngine.winner() == 'W') {
+                intWon++;
+
+            } else if (ChessEngine.winner() == 'B') {
+                intLost++;
+            }
+        }
+
+        for (int i = 0; i < 50; i++) {
+            ChessEngine.reset();
+
+            do {
+                ChessEngine.moveRandom();
+
+                if (ChessEngine.winner() != '?') {
+                    break;
+                }
+
+                ChessEngine.moveGreedy();
+
+                if (ChessEngine.winner() != '?') {
+                    break;
+                }
+            } while (true);
+
+            if (ChessEngine.winner() == 'B') {
+                intWon += 1;
+
+            } else if (ChessEngine.winner() == 'W') {
+                intLost += 1;
+            }
+        }
+
+        assertFalse(intWon < 90);
+        assertFalse(intLost > 10);
     }
 
     @Test
     public void moveNegamax() throws Exception {
+        int intWon = 0;
+        int intLost = 0;
 
+        for (int i = 0; i < 50; i++) {
+            ChessEngine.reset();
+
+            do {
+                ChessEngine.moveNegamax(2, Integer.MAX_VALUE);
+
+                if (ChessEngine.winner() != '?') {
+                    break;
+                }
+
+                ChessEngine.moveGreedy();
+
+                if (ChessEngine.winner() != '?') {
+                    break;
+                }
+            } while (true);
+
+            if (ChessEngine.winner() == 'W') {
+                intWon++;
+
+            } else if (ChessEngine.winner() == 'B') {
+                intLost++;
+
+            }
+        }
+
+        for (int i = 0; i < 50; i++) {
+            ChessEngine.reset();
+
+            do {
+                ChessEngine.moveGreedy();
+
+                if (ChessEngine.winner() != '?') {
+                    break;
+                }
+
+                ChessEngine.moveNegamax(2, Integer.MAX_VALUE);
+
+                if (ChessEngine.winner() != '?') {
+                    break;
+                }
+            } while (true);
+
+            if (ChessEngine.winner() == 'B') {
+                intWon++;
+
+            } else if (ChessEngine.winner() == 'W') {
+                intLost++;
+
+            }
+        }
+
+        assertFalse(intWon < 90);
+        assertFalse(intLost > 10);
     }
 
     @Test
     public void moveAlphabeta() throws Exception {
 
     }
-
-    @Test
-    public void undo() throws Exception {
-        ChessEngine.reset();
-        ChessEngine.move("b2-b3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "1 W\nkqbnr\nppppp\n.....\n.....\nPPPPP\nRNBQK\n");
-
-        ChessEngine.boardSet("16 B\n.kQr.\n...p.\nQ.pq.\n.pn.B\nP..KP\nR....\n");
-        ChessEngine.move("c3-d1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "16 B\n.kQr.\n...p.\nQ.pq.\n.pn.B\nP..KP\nR....\n");
-
-        ChessEngine.boardSet("17 W\n..qn.\np.B.r\n.kN.p\n.....\nPP.pP\n..RK.\n");
-        ChessEngine.move("c4-d2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 W\n..qn.\np.B.r\n.kN.p\n.....\nPP.pP\n..RK.\n");
-
-        ChessEngine.boardSet("15 W\n.qQ..\npkp..\nP.n.r\n.P...\n.pP.P\n..B.K\n");
-        ChessEngine.move("c1-b1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "15 W\n.qQ..\npkp..\nP.n.r\n.P...\n.pP.P\n..B.K\n");
-
-        ChessEngine.boardSet("11 B\nk.Qbr\n.....\n..pp.\nn.pPp\nP.P.P\n.R.QK\n");
-        ChessEngine.move("a3-b5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "11 B\nk.Qbr\n.....\n..pp.\nn.pPp\nP.P.P\n.R.QK\n");
-
-        ChessEngine.boardSet("19 B\n...br\n..p.p\nq....\n.P.kK\n....P\n.R...\n");
-        ChessEngine.move("a4-a3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "19 B\n...br\n..p.p\nq....\n.P.kK\n....P\n.R...\n");
-
-        ChessEngine.boardSet("16 B\n.B.r.\nq.p.p\n...N.\n..k.P\nPpPn.\n...RK\n");
-        ChessEngine.move("c3-c4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "16 B\n.B.r.\nq.p.p\n...N.\n..k.P\nPpPn.\n...RK\n");
-
-        ChessEngine.boardSet("20 W\n.k..r\np..p.\n...bp\n.pP.q\nRQn.P\n..B.K\n");
-        ChessEngine.move("e1-d2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 W\n.k..r\np..p.\n...bp\n.pP.q\nRQn.P\n..B.K\n");
-
-        ChessEngine.boardSet("16 B\nkq.n.\nQp.r.\n...p.\nB.bpP\nP.P..\nRN.K.\n");
-        ChessEngine.move("d4-e3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "16 B\nkq.n.\nQp.r.\n...p.\nB.bpP\nP.P..\nRN.K.\n");
-
-        ChessEngine.boardSet("12 W\nk.b.r\n.p...\np.n.p\n.PpPQ\nP....\nR..BK\n");
-        ChessEngine.move("d3-d4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 W\nk.b.r\n.p...\np.n.p\n.PpPQ\nP....\nR..BK\n");
-
-        ChessEngine.boardSet("12 W\nk....\nqp..r\n.pNpp\npb.P.\nP.PKP\n.R.Q.\n");
-        ChessEngine.move("b1-c1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 W\nk....\nqp..r\n.pNpp\npb.P.\nP.PKP\n.R.Q.\n");
-
-        ChessEngine.boardSet("18 B\n.kb.r\n....p\n.pP..\n.Pp..\n...QP\n..R.K\n");
-        ChessEngine.move("b6-a6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 B\n.kb.r\n....p\n.pP..\n.Pp..\n...QP\n..R.K\n");
-
-        ChessEngine.boardSet("12 B\n.b.nr\nk....\n.p...\nN.PPq\nPp...\nR.Q.K\n");
-        ChessEngine.move("b6-a6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 B\n.b.nr\nk....\n.p...\nN.PPq\nPp...\nR.Q.K\n");
-
-        ChessEngine.boardSet("11 B\nk..Nr\n.ppbp\np....\nP..B.\n..PQP\nR...K\n");
-        ChessEngine.move("c5-c4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "11 B\nk..Nr\n.ppbp\np....\nP..B.\n..PQP\nR...K\n");
-
-        ChessEngine.boardSet("20 W\n....b\n..k..\n.rp.P\nPNP..\n....P\nR.K..\n");
-        ChessEngine.move("a1-b1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 W\n....b\n..k..\n.rp.P\nPNP..\n....P\nR.K..\n");
-
-        ChessEngine.boardSet("13 B\n...r.\n.k.pp\n.pp.n\nP..q.\nRNPPP\nB..QK\n");
-        ChessEngine.move("b5-c6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "13 B\n...r.\n.k.pp\n.pp.n\nP..q.\nRNPPP\nB..QK\n");
-
-        ChessEngine.boardSet("18 W\n...nB\n.k.P.\n.R...\n....b\nP.qP.\n....K\n");
-        ChessEngine.move("b4-b2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\n...nB\n.k.P.\n.R...\n....b\nP.qP.\n....K\n");
-
-        ChessEngine.boardSet("17 B\nk....\n.Nb..\npPp.r\n.qBpP\nP..Q.\n...K.\n");
-        ChessEngine.move("b3-c2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 B\nk....\n.Nb..\npPp.r\n.qBpP\nP..Q.\n...K.\n");
-
-        ChessEngine.boardSet("18 W\nkr...\nb.P..\n.N.pn\np.Q.P\nRPP..\n..B.K\n");
-        ChessEngine.move("e1-d2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\nkr...\nb.P..\n.N.pn\np.Q.P\nRPP..\n..B.K\n");
-
-        ChessEngine.boardSet("15 W\n.b.r.\n.p.Pp\np.kP.\nP...Q\n.P..P\nR..BK\n");
-        ChessEngine.move("d1-a4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "15 W\n.b.r.\n.p.Pp\np.kP.\nP...Q\n.P..P\nR..BK\n");
-
-        ChessEngine.boardSet("20 W\n..br.\n.p.p.\np.Pp.\n....p\n.kRK.\n.N...\n");
-        ChessEngine.move("c4-b5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 W\n..br.\n.p.p.\np.Pp.\n....p\n.kRK.\n.N...\n");
-
-        ChessEngine.boardSet("13 B\nkNb..\nq.p..\nBpnrp\nP..Pp\n.P.QK\n..R..\n");
-        ChessEngine.move("c6-d6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "13 B\nkNb..\nq.p..\nBpnrp\nP..Pp\n.P.QK\n..R..\n");
-
-        ChessEngine.boardSet("18 W\nk....\np....\nP....\n.P.Q.\n.nNK.\nq....\n");
-        ChessEngine.move("d3-a6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\nk....\np....\nP....\n.P.Q.\n.nNK.\nq....\n");
-
-        ChessEngine.boardSet("12 B\nkq..r\npp.b.\nP..p.\n..BpP\n.Pp..\n.NQ.K\n");
-        ChessEngine.move("e6-e5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 B\nkq..r\npp.b.\nP..p.\n..BpP\n.Pp..\n.NQ.K\n");
-
-        ChessEngine.boardSet("14 W\nq.br.\nB.ppp\nP.P..\n...PP\n.....\n.R.kK\n");
-        ChessEngine.move("b1-b5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 W\nq.br.\nB.ppp\nP.P..\n...PP\n.....\n.R.kK\n");
-
-        ChessEngine.boardSet("11 B\nk...r\nqp...\np.b.p\n.P...\nPBPnK\nR...Q\n");
-        ChessEngine.move("e6-e5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "11 B\nk...r\nqp...\np.b.p\n.P...\nPBPnK\nR...Q\n");
-
-        ChessEngine.boardSet("14 W\n.q.r.\n.k...\n.pppp\nPnP..\n.P...\nRN.BK\n");
-        ChessEngine.move("a1-a2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 W\n.q.r.\n.k...\n.pppp\nPnP..\n.P...\nRN.BK\n");
-
-        ChessEngine.boardSet("17 B\nk..q.\npppN.\n..r..\n...p.\nP..PP\nR.Q.K\n");
-        ChessEngine.move("d3-e2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 B\nk..q.\npppN.\n..r..\n...p.\nP..PP\nR.Q.K\n");
-
-        ChessEngine.boardSet("12 W\nk.br.\np.ppp\n..p.P\n.Pq..\nP....\nQ...K\n");
-        ChessEngine.move("e1-d1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 W\nk.br.\np.ppp\n..p.P\n.Pq..\nP....\nQ...K\n");
-
-        ChessEngine.boardSet("18 W\n.kq.r\n.NB.Q\n.p...\np.bPp\n.PP.P\n..R.K\n");
-        ChessEngine.move("b2-c3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\n.kq.r\n.NB.Q\n.p...\np.bPp\n.PP.P\n..R.K\n");
-
-        ChessEngine.boardSet("17 B\nk....\np...p\n.P.r.\n..NqP\nRP..K\n...q.\n");
-        ChessEngine.move("d4-c4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 B\nk....\np...p\n.P.r.\n..NqP\nRP..K\n...q.\n");
-
-        ChessEngine.boardSet("12 W\nk..n.\npp...\nP.p.r\n..b.P\nRP...\n.N.QK\n");
-        ChessEngine.move("a4-b5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 W\nk..n.\npp...\nP.p.r\n..b.P\nRP...\n.N.QK\n");
-
-        ChessEngine.boardSet("14 W\n...nr\nqkp..\npp.bP\n.P...\nPQP.P\n.RB.K\n");
-        ChessEngine.move("a2-a3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 W\n...nr\nqkp..\npp.bP\n.P...\nPQP.P\n.RB.K\n");
-
-        ChessEngine.boardSet("18 W\nk..Q.\nq...p\npQb..\nP....\n.n.N.\nR.B.K\n");
-        ChessEngine.move("d6-c5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\nk..Q.\nq...p\npQb..\nP....\n.n.N.\nR.B.K\n");
-
-        ChessEngine.boardSet("14 W\nk.r..\n.p.pq\nn.Q..\nP.P..\n..BPP\nR..K.\n");
-        ChessEngine.move("a1-a2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 W\nk.r..\n.p.pq\nn.Q..\nP.P..\n..BPP\nR..K.\n");
-
-        ChessEngine.boardSet("19 W\n...k.\n..bpB\np.q..\np...p\nP.P.P\n.Q.K.\n");
-        ChessEngine.move("b1-b6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "19 W\n...k.\n..bpB\np.q..\np...p\nP.P.P\n.Q.K.\n");
-
-        ChessEngine.boardSet("15 W\n.k...\npqp.b\nQ...p\n....B\nNP..P\n.R..K\n");
-        ChessEngine.move("e1-d1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "15 W\n.k...\npqp.b\nQ...p\n....B\nNP..P\n.R..K\n");
-
-        ChessEngine.boardSet("20 W\nkq.nr\n..p..\nb.Pp.\n..NP.\npBQ.P\n...K.\n");
-        ChessEngine.move("b2-c1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 W\nkq.nr\n..p..\nb.Pp.\n..NP.\npBQ.P\n...K.\n");
-
-        ChessEngine.boardSet("20 B\n..kb.\n...pr\n.pN.p\n.....\n...P.\n...KQ\n");
-        ChessEngine.move("d5-c4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 B\n..kb.\n...pr\n.pN.p\n.....\n...P.\n...KQ\n");
-
-        ChessEngine.boardSet("14 B\nk....\n..r..\n..pPp\n....P\nPP..P\nRBK..\n");
-        ChessEngine.move("c5-c6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 B\nk....\n..r..\n..pPp\n....P\nPP..P\nRBK..\n");
-
-        ChessEngine.boardSet("19 B\nk..nr\n...P.\npp.Kp\nNP...\nP.qb.\n..B..\n");
-        ChessEngine.move("d2-c3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "19 B\nk..nr\n...P.\npp.Kp\nNP...\nP.qb.\n..B..\n");
-
-        ChessEngine.boardSet("18 W\nk...r\n....Q\np.n.b\nPp..P\nRPpK.\nB....\n");
-        ChessEngine.move("d2-d3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\nk...r\n....Q\np.n.b\nPp..P\nRPpK.\nB....\n");
-
-        ChessEngine.boardSet("19 W\n.N...\npP...\n.k.p.\n.PQ.n\nB...r\nR..K.\n");
-        ChessEngine.move("c3-c5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "19 W\n.N...\npP...\n.k.p.\n.PQ.n\nB...r\nR..K.\n");
-
-        ChessEngine.boardSet("17 B\nk..n.\n.p..r\np.bB.\n.....\nP.P.K\nRN...\n");
-        ChessEngine.move("c4-a2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 B\nk..n.\n.p..r\np.bB.\n.....\nP.P.K\nRN...\n");
-
-        ChessEngine.boardSet("18 W\n..b.r\nkBQ.p\n.....\nnP.PP\nP..P.\n.R..K\n");
-        ChessEngine.move("b5-c6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\n..b.r\nkBQ.p\n.....\nnP.PP\nP..P.\n.R..K\n");
-
-        ChessEngine.boardSet("13 B\n...n.\n..p.b\n.Q.pr\nPkp.p\n.PBPP\n.R.K.\n");
-        ChessEngine.move("b3-a2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "13 B\n...n.\n..p.b\n.Q.pr\nPkp.p\n.PBPP\n.R.K.\n");
-
-        ChessEngine.boardSet("17 W\nk....\nppq.N\n..nP.\nP....\n.....\n..RK.\n");
-        ChessEngine.move("c1-c3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 W\nk....\nppq.N\n..nP.\nP....\n.....\n..RK.\n");
-
-        ChessEngine.boardSet("18 W\nk....\nqp..r\npbBpn\nPPP.N\n...PQ\n...RK\n");
-        ChessEngine.move("c4-b5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\nk....\nqp..r\npbBpn\nPPP.N\n...PQ\n...RK\n");
-
-        ChessEngine.boardSet("20 B\n.....\nkr...\n.PPN.\n..R..\n....P\n...K.\n");
-        ChessEngine.move("a5-b6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 B\n.....\nkr...\n.PPN.\n..R..\n....P\n...K.\n");
-
-        ChessEngine.boardSet("14 B\n.Q.r.\npnPb.\n.p..P\n.Pk.K\nP.PB.\nRN...\n");
-        ChessEngine.move("c3-c4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 B\n.Q.r.\npnPb.\n.p..P\n.Pk.K\nP.PB.\nRN...\n");
-
-        ChessEngine.boardSet("12 B\nk.br.\n.p.p.\nq.n..\n...p.\nP.QNP\n.RB.K\n");
-        ChessEngine.move("a4-b3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 B\nk.br.\n.p.p.\nq.n..\n...p.\nP.QNP\n.RB.K\n");
-
-        ChessEngine.boardSet("19 B\n.q...\nk...r\n.p...\n.Q..K\nPp...\nRn...\n");
-        ChessEngine.move("e5-e6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "19 B\n.q...\nk...r\n.p...\n.Q..K\nPp...\nRn...\n");
-
-        ChessEngine.boardSet("12 B\n....r\n.kqpp\nb.p..\n..nQP\n..PP.\nBq..K\n");
-        ChessEngine.move("c3-a2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 B\n....r\n.kqpp\nb.p..\n..nQP\n..PP.\nBq..K\n");
-
-        ChessEngine.boardSet("18 W\n...nr\np.kpp\n.....\nNPP.P\n.Q.K.\n.R.b.\n");
-        ChessEngine.move("b2-c2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\n...nr\np.kpp\n.....\nNPP.P\n.Q.K.\n.R.b.\n");
-
-        ChessEngine.boardSet("14 W\nq.br.\n....p\n.Pkp.\np.PQP\nP.P..\nRB.K.\n");
-        ChessEngine.move("d1-e1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 W\nq.br.\n....p\n.Pkp.\np.PQP\nP.P..\nRB.K.\n");
-
-        ChessEngine.boardSet("15 B\nk..br\nRp..N\n.P.p.\n...p.\n....q\n.B.QK\n");
-        ChessEngine.move("e2-b2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "15 B\nk..br\nRp..N\n.P.p.\n...p.\n....q\n.B.QK\n");
-
-        ChessEngine.boardSet("18 W\n...br\n....p\nk..pp\nP..K.\n...nQ\nRq...\n");
-        ChessEngine.move("e2-d2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\n...br\n....p\nk..pp\nP..K.\n...nQ\nRq...\n");
-
-        ChessEngine.boardSet("14 B\nk.r..\nq...p\nn.p..\n.b.P.\nPPPBP\nR..QK\n");
-        ChessEngine.move("c6-c5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 B\nk.r..\nq...p\nn.p..\n.b.P.\nPPPBP\nR..QK\n");
-
-        ChessEngine.boardSet("17 W\nkQbn.\np..p.\n...P.\n.....\nRBP.K\n.N...\n");
-        ChessEngine.move("b6-a6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 W\nkQbn.\np..p.\n...P.\n.....\nRBP.K\n.N...\n");
-
-        ChessEngine.boardSet("18 W\nk.br.\n....p\n.PPpP\np....\n.nPP.\n.R.K.\n");
-        ChessEngine.move("d1-e1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\nk.br.\n....p\n.PPpP\np....\n.nPP.\n.R.K.\n");
-
-        ChessEngine.boardSet("13 B\n.kqr.\np.p..\n.pPQp\nP....\n.PP.K\n.RB..\n");
-        ChessEngine.move("d6-d5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "13 B\n.kqr.\np.p..\n.pPQp\nP....\n.PP.K\n.RB..\n");
-
-        ChessEngine.boardSet("14 B\n..bn.\np.p.r\n..PPp\n...QK\n.k...\n.R...\n");
-        ChessEngine.move("c6-d5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 B\n..bn.\np.p.r\n..PPp\n...QK\n.k...\n.R...\n");
-
-        ChessEngine.boardSet("11 B\n..b.r\nNQppp\n..k.P\nP....\n.PBP.\nR...K\n");
-        ChessEngine.move("c4-d4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "11 B\n..b.r\nNQppp\n..k.P\nP....\n.PBP.\nR...K\n");
-
-        ChessEngine.boardSet("12 B\n.k..r\npPpQb\n....p\n.P..P\n..P.P\n....K\n");
-        ChessEngine.move("e5-d4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 B\n.k..r\npPpQb\n....p\n.P..P\n..P.P\n....K\n");
-
-        ChessEngine.boardSet("12 B\nkb..r\np.pBp\n....n\nP..PP\n..N..\nR..QK\n");
-        ChessEngine.move("c5-c4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 B\nkb..r\np.pBp\n....n\nP..PP\n..N..\nR..QK\n");
-
-        ChessEngine.boardSet("17 B\nk...r\np..P.\nb.Ppp\nR.N.q\n....B\n...K.\n");
-        ChessEngine.move("a4-c6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 B\nk...r\np..P.\nb.Ppp\nR.N.q\n....B\n...K.\n");
-
-        ChessEngine.boardSet("14 W\n..Nnr\n.kp.Q\n.p...\n..PP.\nqP.B.\nR...K\n");
-        ChessEngine.move("e5-e4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 W\n..Nnr\n.kp.Q\n.p...\n..PP.\nqP.B.\nR...K\n");
-
-        ChessEngine.boardSet("15 W\nk....\npnp.r\nP.bq.\n..pP.\n....P\nRB.K.\n");
-        ChessEngine.move("a1-a3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "15 W\nk....\npnp.r\nP.bq.\n..pP.\n....P\nRB.K.\n");
-
-        ChessEngine.boardSet("14 B\n.kb.r\n..pp.\n..pBp\nPQP..\n....P\nR..K.\n");
-        ChessEngine.move("e4-e3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 B\n.kb.r\n..pp.\n..pBp\nPQP..\n....P\nR..K.\n");
-
-        ChessEngine.boardSet("17 W\nbk...\n...p.\npppPK\nBP...\nP.P..\nRN...\n");
-        ChessEngine.move("b3-a4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 W\nbk...\n...p.\npppPK\nBP...\nP.P..\nRN...\n");
-
-        ChessEngine.boardSet("16 W\nkNbnr\n..pp.\npp..p\n....P\nRqK..\n..B..\n");
-        ChessEngine.move("a2-a1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "16 W\nkNbnr\n..pp.\npp..p\n....P\nRqK..\n..B..\n");
-
-        ChessEngine.boardSet("12 W\nkq..r\n.n...\nPpppp\nNp..Q\nRBP.b\n....K\n");
-        ChessEngine.move("c2-c3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 W\nkq..r\n.n...\nPpppp\nNp..Q\nRBP.b\n....K\n");
-
-        ChessEngine.boardSet("15 B\nk...r\n...b.\nppn..\n.P..B\nP.QPK\nR....\n");
-        ChessEngine.move("d5-c6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "15 B\nk...r\n...b.\nppn..\n.P..B\nP.QPK\nR....\n");
-
-        ChessEngine.boardSet("19 W\n.....\n.pB.p\n..k..\nN....\nP.Qrq\nR...K\n");
-        ChessEngine.move("c2-d2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "19 W\n.....\n.pB.p\n..k..\nN....\nP.Qrq\nR...K\n");
-
-        ChessEngine.boardSet("19 W\nk..r.\n...pp\nP.b.P\nN.P..\nPRB.n\n....K\n");
-        ChessEngine.move("b2-b6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "19 W\nk..r.\n...pp\nP.b.P\nN.P..\nPRB.n\n....K\n");
-
-        ChessEngine.boardSet("12 B\nk.bnr\n..Pp.\n....p\nP.N.P\n..p.B\n...K.\n");
-        ChessEngine.move("a6-a5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 B\nk.bnr\n..Pp.\n....p\nP.N.P\n..p.B\n...K.\n");
-
-        ChessEngine.boardSet("15 B\nkq...\np.bp.\n.qp.N\n...K.\nP...P\nR..Q.\n");
-        ChessEngine.move("b6-b5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "15 B\nkq...\np.bp.\n.qp.N\n...K.\nP...P\nR..Q.\n");
-
-        ChessEngine.boardSet("13 B\n...nr\n.kPbp\np.Pp.\n.P...\n.....\nRN.BK\n");
-        ChessEngine.move("b5-a6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "13 B\n...nr\n.kPbp\np.Pp.\n.P...\n.....\nRN.BK\n");
-
-        ChessEngine.boardSet("16 W\n...br\n..kpp\nq..Kn\nPPpPP\n.....\n.RBQ.\n");
-        ChessEngine.move("b1-a1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "16 W\n...br\n..kpp\nq..Kn\nPPpPP\n.....\n.RBQ.\n");
-
-        ChessEngine.boardSet("12 W\n.k.Qr\n..b.q\nppP.p\n....P\nPPP..\nR..BK\n");
-        ChessEngine.move("a2-a3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 W\n.k.Qr\n..b.q\nppP.p\n....P\nPPP..\nR..BK\n");
-
-        ChessEngine.boardSet("15 W\nk..br\n..p.p\npqP..\n.P.p.\nP..nP\nB.R.K\n");
-        ChessEngine.move("e1-d2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "15 W\nk..br\n..p.p\npqP..\n.P.p.\nP..nP\nB.R.K\n");
-
-        ChessEngine.boardSet("18 W\nk..qr\nppBbp\n..n..\n..Q.P\nPP.NK\n...R.\n");
-        ChessEngine.move("d2-e4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\nk..qr\nppBbp\n..n..\n..Q.P\nPP.NK\n...R.\n");
-
-        ChessEngine.boardSet("13 W\n....r\nk..bp\nPNn..\nP....\n.BPP.\n.R.qK\n");
-        ChessEngine.move("c2-c3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "13 W\n....r\nk..bp\nPNn..\nP....\n.BPP.\n.R.qK\n");
-
-        ChessEngine.boardSet("18 B\nk.b.r\n....p\np..p.\nP.B.P\n....q\nn..K.\n");
-        ChessEngine.move("e2-c2");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 B\nk.b.r\n....p\np..p.\nP.B.P\n....q\nn..K.\n");
-
-        ChessEngine.boardSet("15 W\n...kr\nq...p\n.pQpP\npP...\n..P.B\nRN.K.\n");
-        ChessEngine.move("d1-c1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "15 W\n...kr\nq...p\n.pQpP\npP...\n..P.B\nRN.K.\n");
-
-        ChessEngine.boardSet("19 W\n.k.nr\nq.p.p\np.b..\np.PBP\nPP...\n..R.K\n");
-        ChessEngine.move("d3-e4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "19 W\n.k.nr\nq.p.p\np.b..\np.PBP\nPP...\n..R.K\n");
-
-        ChessEngine.boardSet("14 B\n..bnr\n..k.p\nqQpP.\nK..P.\nPpP.B\n.R...\n");
-        ChessEngine.move("a4-b4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "14 B\n..bnr\n..k.p\nqQpP.\nK..P.\nPpP.B\n.R...\n");
-
-        ChessEngine.boardSet("20 B\n..n.r\n..k.p\n.pb..\n....P\nP.BP.\nR...K\n");
-        ChessEngine.move("c5-b6");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 B\n..n.r\n..k.p\n.pb..\n....P\nP.BP.\nR...K\n");
-
-        ChessEngine.boardSet("20 W\n.....\nppkp.\nb....\nN...K\n.PQ..\n..R..\n");
-        ChessEngine.move("c2-e4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 W\n.....\nppkp.\nb....\nN...K\n.PQ..\n..R..\n");
-
-        ChessEngine.boardSet("16 B\nkr...\nQ....\nN.qp.\n.p..K\nP..RP\n.b...\n");
-        ChessEngine.move("c4-c5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "16 B\nkr...\nQ....\nN.qp.\n.p..K\nP..RP\n.b...\n");
-
-        ChessEngine.boardSet("18 B\n..bnr\n..kp.\np..P.\n.pP..\n...Kp\n..RQ.\n");
-        ChessEngine.move("c5-b4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 B\n..bnr\n..kp.\np..P.\n.pP..\n...Kp\n..RQ.\n");
-
-        ChessEngine.boardSet("20 W\nk..b.\n..p..\nqp.np\nPBQ.P\nP..pK\nRN...\n");
-        ChessEngine.move("c3-c4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 W\nk..b.\n..p..\nqp.np\nPBQ.P\nP..pK\nRN...\n");
-
-        ChessEngine.boardSet("17 W\n..br.\nk..pp\n..p.N\nqpPPP\nR....\nQ...K\n");
-        ChessEngine.move("a1-b1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "17 W\n..br.\nk..pp\n..p.N\nqpPPP\nR....\nQ...K\n");
-
-        ChessEngine.boardSet("21 W\nk...r\np.q.p\n.Q..n\n.PpPp\n.RP..\n....K\n");
-        ChessEngine.move("d3-d4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "21 W\nk...r\np.q.p\n.Q..n\n.PpPp\n.RP..\n....K\n");
-
-        ChessEngine.boardSet("12 W\n....q\npkppr\n.p..p\nP.N.Q\nb.PPK\nR.B..\n");
-        ChessEngine.move("c1-d1");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "12 W\n....q\npkppr\n.p..p\nP.N.Q\nb.PPK\nR.B..\n");
-
-        ChessEngine.boardSet("13 B\n...b.\n..p.r\n..kpp\nq.PPP\nRP.BK\n.NQ..\n");
-        ChessEngine.move("c4-c3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "13 B\n...b.\n..p.r\n..kpp\nq.PPP\nRP.BK\n.NQ..\n");
-
-        ChessEngine.boardSet("18 W\nkq.br\npB...\nnp.Pp\n....p\n.RPK.\n.....\n");
-        ChessEngine.move("c2-c3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\nkq.br\npB...\nnp.Pp\n....p\n.RPK.\n.....\n");
-
-        ChessEngine.boardSet("18 W\nb...r\npk...\n.Pnpp\nBP..P\nP.R.K\n.....\n");
-        ChessEngine.move("e2-d3");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "18 W\nb...r\npk...\n.Pnpp\nBP..P\nP.R.K\n.....\n");
-
-        ChessEngine.boardSet("11 B\n.qbnr\n.k.P.\n.Pp.p\nQ...P\nNP.P.\n.RB.K\n");
-        ChessEngine.move("c6-c5");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "11 B\n.qbnr\n.k.P.\n.Pp.p\nQ...P\nNP.P.\n.RB.K\n");
-
-        ChessEngine.boardSet("20 W\nk..br\n.p.Qp\n.P...\n....q\nPpK.p\n.nR..\n");
-        ChessEngine.move("d5-e4");
-        ChessEngine.undo();
-        assertEquals(ChessEngine.boardGet(), "20 W\nk..br\n.p.Qp\n.P...\n....q\nPpK.p\n.nR..\n");
-    }
-
 }

@@ -15,6 +15,7 @@ public class ChessEngine {
     private static final int bishopValue = 300;
     private static final int queenValue = 900;
     private static final int kingValue = 10000;
+    private static final int infinity = 100000000;
 
     //Game rules
     public static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
@@ -665,22 +666,76 @@ public class ChessEngine {
         gameState.move(m);
     }
 
+    /**
+     * Performs a random move and returns the move as a string.
+     *
+     * @return The random move performed as a string.
+     */
     public static String moveRandom() {
-        // perform a random move and return it - one example output is given below - note that you can call the chess.movesShuffled() function as well as the chess.move() function in here
-        return movesShuffled().firstElement();
+        String randomMove = movesShuffled().firstElement();
+        move(randomMove);
+        return randomMove;
     }
 
+    /**
+     * Performs a move with the highest eval score and returns the move as a string.
+     *
+     * @return The "best" move performed as a string.
+     */
     public static String moveGreedy() {
-        // perform a greedy move and return it - one example output is given below - note that you can call the chess.movesEvaluated() function as well as the chess.move() function in here
-
-        return "a5-a4\n";
+        String greedyMove = movesEvaluated().firstElement();
+        move(greedyMove);
+        return greedyMove;
     }
 
+    /**
+     * Evaluates valid moves using an adversary search bounded by intDepth and intDuration, performs the move with the highest eval score, and returns it as a string.
+     *
+     * @param intDepth    How deep the adversary search tree should be.
+     * @param intDuration How much time is left to perform the search (-1 indicates "Tournament Mode", meaning a preset duration will be used)
+     * @return The performed move as a string.
+     */
     public static String moveNegamax(int intDepth, int intDuration) {
-        // perform a negamax move and return it - one example output is given below - note that you can call the the other functions in here
+        String best = "";
+        int score = -infinity;
+        int temp = 0;
 
-        return "a5-a4\n";
+        for (String move : movesShuffled()) {
+            move(move);
+            temp = -negamax(intDepth - 1, intDuration);
+            undo();
+
+            if (temp > score) {
+                best = move;
+                score = temp;
+            }
+        }
+
+        return best;
     }
+
+    /**
+     * Performs negamax adversary search and returns eval score at top node level.
+     *
+     * @param intDepth    How deep the adversary search tree should be.
+     * @param intDuration How much time is left to perform the search.
+     * @return The eval score at the top node level.
+     */
+    private static int negamax(int intDepth, int intDuration) {
+        if (intDepth == 0 || winner() != '?' || intDuration <= 0) {
+            return eval();
+        }
+
+        int score = -infinity;
+        for (String move : movesShuffled()) {
+            move(move);
+            score = Integer.max(score, -negamax(intDepth - 1, intDuration));
+            undo();
+        }
+
+        return score;
+    }
+
 
     public static String moveAlphabeta(int intDepth, int intDuration) {
         // perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here
