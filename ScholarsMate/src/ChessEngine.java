@@ -8,6 +8,7 @@
 import java.util.*;
 
 public class ChessEngine {
+
     //Evaluation heuristic values
     private static final int pawnValue = 100;
     private static final int rookValue = 500;
@@ -15,7 +16,11 @@ public class ChessEngine {
     private static final int bishopValue = 300;
     private static final int queenValue = 900;
     private static final int kingValue = 10000;
+
     private static final int infinity = 100000000;
+
+    private static final int tournamentStartingDuration = 10000000;
+    private static int tournamentDuration = tournamentStartingDuration;
 
     //Game rules
     public static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
@@ -45,6 +50,7 @@ public class ChessEngine {
         gameState.setBoard(startingBoard);
         gameState.setMoveNumber(startingMove);
         gameState.setIsWhitesPly(startingIsWhitesPly);
+        tournamentDuration = tournamentStartingDuration;
     }
 
     /**
@@ -689,58 +695,121 @@ public class ChessEngine {
     }
 
     /**
-     * Evaluates valid moves using an adversary search bounded by intDepth and intDuration, performs the move with the highest eval score, and returns it as a string.
+     * Evaluates valid moves using an adversary search bounded by depth and duration, performs the move with the highest eval score, and returns it as a string.
      *
-     * @param intDepth    How deep the adversary search tree should be.
-     * @param intDuration How much time is left to perform the search (-1 indicates "Tournament Mode", meaning a preset duration will be used)
+     * @param depth    How deep the adversary search tree should be.
+     * @param duration How much time is left to perform the search (-1 indicates "Tournament Mode", meaning a preset duration will be used)
      * @return The performed move as a string.
      */
-    public static String moveNegamax(int intDepth, int intDuration) {
-        String best = "";
-        int score = -infinity;
+    public static String moveNegamax(int depth, int duration) {
+        //TODO Iterative deepening;
+        String bestMove = "";
+        int highestScore = -infinity;
         int temp = 0;
+
+        if (duration == -1) {
+            duration = tournamentDuration;
+        }
 
         for (String move : movesShuffled()) {
             move(move);
-            temp = -negamax(intDepth - 1, intDuration);
+            temp = -negamax(depth - 1, duration);
             undo();
 
-            if (temp > score) {
-                best = move;
-                score = temp;
+            if (temp > highestScore) {
+                bestMove = move;
+                highestScore = temp;
             }
         }
 
-        return best;
+        move(bestMove);
+        return bestMove;
     }
 
     /**
      * Performs negamax adversary search and returns eval score at top node level.
      *
-     * @param intDepth    How deep the adversary search tree should be.
-     * @param intDuration How much time is left to perform the search.
+     * @param depth    How deep the adversary search tree should be.
+     * @param duration How much time is left to perform the search.
      * @return The eval score at the top node level.
      */
-    private static int negamax(int intDepth, int intDuration) {
-        if (intDepth == 0 || winner() != '?' || intDuration <= 0) {
+    private static int negamax(int depth, int duration) {
+        //TODO Iterative deepening;
+        if (depth == 0 || winner() != '?' || duration <= 0) {
             return eval();
         }
 
         int score = -infinity;
         for (String move : movesShuffled()) {
             move(move);
-            score = Integer.max(score, -negamax(intDepth - 1, intDuration));
+            score = Integer.max(score, -negamax(depth - 1, duration));
             undo();
         }
 
         return score;
     }
 
+    /**
+     * Evaluates valid moves using an adversary search bounded by depth and duration, performs the move with the highest eval score, and returns it as a string. Utilizes alpha beta search tree pruning.
+     *
+     * @param depth    How deep the adversary search tree should be.
+     * @param duration How much time is left to perform the search (-1 indicates "Tournament Mode", meaning a preset duration will be used)
+     * @return The performed move as a string.
+     */
+    public static String moveAlphabeta(int depth, int duration) {
+        //TODO Iterative deepening;
+        String bestMove = "";
+        int alpha = -infinity;
+        int beta = -infinity;
+        int temp = 0;
 
-    public static String moveAlphabeta(int intDepth, int intDuration) {
-        // perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here
+        if (duration == -1) {
+            duration = tournamentDuration;
+        }
 
-        return "a5-a4\n";
+        for (String move : movesShuffled()) {
+            move(move);
+            temp = -alphabeta(depth - 1, -beta, -alpha, duration);
+            undo();
+
+            if (temp > alpha) {
+                bestMove = move;
+                alpha = temp;
+            }
+        }
+
+        return bestMove;
+    }
+
+    /**
+     * Performs negamax adversary search and returns eval score at top node level, utilizing alpha beta pruning.
+     *
+     * @param depth    How deep the adversary search tree should be.
+     * @param alpha    alpha
+     * @param beta     beta
+     * @param duration How much time is left to perform the search (-1 indicates "Tournament Mode", meaning a preset duration will be used)
+     * @return The eval score at the top node level.
+     */
+    private static int alphabeta(int depth, int alpha, int beta, int duration) {
+        if (depth == 0 || winner() != '?' || duration <= 0) {
+            return eval();
+        }
+
+        int score = -infinity;
+
+        for (String move : movesShuffled()) {
+            move(move);
+            score = Integer.max(score, -alphabeta(depth - 1, -beta, -alpha, duration));
+            undo();
+
+            alpha = Integer.max(alpha, score);
+
+            if (alpha >= beta) {
+                break;
+            }
+        }
+
+        return score;
     }
 
     /**

@@ -5,17 +5,17 @@
   04/07/16
 */
 
-public class ChessClient {
+public class main {
     public static int intZeromq = 54372; // CHANGE THIS - OPTIONAL
     public static String clientName = "ScholarsMate";
 
     public static void main(String[] args) {
-        assert ChessClient.intZeromq > 1024;
-        assert ChessClient.intZeromq < 65535;
+        assert main.intZeromq > 1024;
+        assert main.intZeromq < 65535;
 
-        assert ChessClient.clientName.length() > 2;
-        assert ChessClient.clientName.length() < 16;
-        assert !ChessClient.clientName.contains(" ");
+        assert main.clientName.length() > 2;
+        assert main.clientName.length() < 16;
+        assert !main.clientName.contains(" ");
 
         try {
             ZeroMQ.start();

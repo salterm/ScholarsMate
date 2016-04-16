@@ -3370,9 +3370,4 @@ public class chessEngineTest {
         assertFalse(intWon < 90);
         assertFalse(intLost > 10);
     }
-
-    @Test
-    public void moveAlphabeta() throws Exception {
-
-    }
 }

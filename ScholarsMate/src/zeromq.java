@@ -19,7 +19,7 @@ public class ZeroMQ {
         ZMQ.Context contextHandle = ZMQ.context(1);
         ZMQ.Socket socketHandle = contextHandle.socket(ZMQ.PAIR);
 
-        socketHandle.bind("tcp://*:" + ChessClient.intZeromq);
+        socketHandle.bind("tcp://*:" + main.intZeromq);
 
         do {
             JSONObject jsonobjectIn = null;
@@ -28,7 +28,7 @@ public class ZeroMQ {
             jsonobjectIn = new JSONObject(socketHandle.recvStr());
 
             if (jsonobjectIn.getString("strFunction").equals("ping")) {
-                jsonobjectOut.put("strOut", ChessClient.clientName);
+                jsonobjectOut.put("strOut", main.clientName);
 
             } else if (jsonobjectIn.getString("strFunction").equals("chess_reset")) {
                 ChessEngine.reset();
