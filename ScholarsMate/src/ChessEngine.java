@@ -1,8 +1,8 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 1
+  Chess player, Homework 2
   Michael Salter
-  04/07/16
+  04/19/16
 */
 
 import java.util.*;
@@ -67,52 +67,53 @@ public class ChessEngine {
     public static void boardSet(String strIn) {
         String[] strInSplit = strIn.split("\\n");
 
-        //Validation test
+/*        //Validation test
         if (strInSplit.length != 7) {
             throw new ChessError("Invalid state line count: " + strInSplit.length);
-        }
+        }*/
 
         String[] moveAndPly = strInSplit[0].split("\\s");
 
-        //Validation test
+/*        //Validation test
         if (moveAndPly.length != 2) {
             throw new ChessError("Invalid first line: " + strInSplit[0]);
-        }
+        }*/
 
-        //Validation test
+/*        //Validation test
         for (int i = 1; i < strInSplit.length; i++) {
             String s = strInSplit[i];
             if (s.length() != 5) {
                 throw new ChessError("Invalid board line: " + s);
             }
-        }
+        }*/
 
         int newMove = Integer.valueOf(moveAndPly[0]);
 
-        //Validation test
+/*        //Validation test
         if (newMove < 1 || newMove > 41) {
             throw new ChessError("Invalid move number: " + newMove);
-        }
+        }*/
 
         boolean newIsWhitesPly;
         if (moveAndPly[1].equals(whiteTurn)) {
             newIsWhitesPly = true;
-        } else if (moveAndPly[1].equals(blackTurn)) {
+        } else /*if (moveAndPly[1].equals(blackTurn))*/ {
             newIsWhitesPly = false;
-        } else {
+        } /*else {
             //Validation test
             throw new ChessError("Invalid turn format: " + moveAndPly[1]);
-        }
+        }*/
 
         char[][] newBoard = new char[State.boardHeight][State.boardWidth];
         char a;
         for (int i = 0; i < State.boardHeight; i++) {
             for (int j = 0; j < State.boardWidth; j++) {
                 a = strInSplit[i + 1].charAt(j);
-                //Validation test
+                /*//Validation test
                 if (!validPieces.contains(a)) {
                     throw new ChessError("Invalid game piece: " + a);
-                } else {
+                } else*/
+                {
                     newBoard[i][j] = a;
                 }
             }
@@ -788,8 +789,14 @@ public class ChessEngine {
      * @return The eval score at the top node level.
      */
     private static int alphabeta(int depth, int alpha, int beta) {
-        if (depth == 0 || winner() != '?') {
+        if (depth == 0) {
             return eval();
+        }
+        char winner = winner();
+        if (winner == 'B' || winner == 'W') {
+            return eval();
+        } else if (winner == '=') {
+            return 0;
         }
 
         int score = -infinity;
@@ -813,9 +820,7 @@ public class ChessEngine {
      * Undo the last move and reset internal variables accordingly.
      */
     public static void undo() {
-        if (historyStack.empty()) {
-            throw new ChessError("No move available to undo!");
-        } else {
+        if (!historyStack.empty()) {
             Move m = historyStack.pop();
 
             //Reset positions

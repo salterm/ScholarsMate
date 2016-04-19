@@ -1,8 +1,8 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 1
+  Chess player, Homework 2
   Michael Salter
-  04/07/16
+  04/19/16
 */
 
 public class State {
