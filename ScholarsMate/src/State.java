@@ -1,13 +1,13 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 2
+  Chess player, Homework 5
   Michael Salter
-  04/19/16
+  05/17/16
 */
 
 public class State {
-    public static final int boardWidth = 5;
-    public static final int boardHeight = 6;
+    public static final int boardWidth = 5; //columns
+    public static final int boardHeight = 6; //rows
     private char[][] board; //[row][column]
     private int moveNumber;
     private boolean isWhitesPly;

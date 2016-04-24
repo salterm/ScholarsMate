@@ -1,8 +1,8 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 2
+  Chess player, Homework 5
   Michael Salter
-  04/19/16
+  05/17/16
 */
 
 /**

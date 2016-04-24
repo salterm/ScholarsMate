@@ -1,8 +1,8 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 2
+  Chess player, Homework 5
   Michael Salter
-  04/19/16
+  05/17/16
 */
 
 import java.util.*;
@@ -20,6 +20,9 @@ public class ChessEngine {
 
     private static final int tournamentDepth = 4;
 
+    //Transposition table
+    private static TranspositionTable transpositionTable = new TranspositionTable();
+
     //Game rules
     public static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
     private static final char startingBoard[][] = {
@@ -31,8 +34,8 @@ public class ChessEngine {
             {'R', 'N', 'B', 'Q', 'K'}};
     private static final int startingMove = 1;
     private static final boolean startingIsWhitesPly = true;
-    private static final ArrayList<Character> validPieces = new ArrayList<>(
-            Arrays.asList('k', 'q', 'b', 'n', 'r', 'p', 'K', 'Q', 'B', 'N', 'R', 'P', '.'));
+    public static final ArrayList<Character> validPieces = new ArrayList<>(
+            Arrays.asList('k', 'q', 'b', 'n', 'r', 'p', 'K', 'Q', 'B', 'N', 'R', 'P'));
     private static final String whiteTurn = "W";
     private static final String blackTurn = "B";
 
@@ -701,12 +704,13 @@ public class ChessEngine {
      * @return The performed move as a string.
      */
     public static String moveNegamax(int depth, int duration) {
-        //TODO Iterative deepening;
+        //TODO Iterative deepening
         String bestMove = "";
         int highestScore = -infinity;
         int tempScore = 0;
 
         if (depth == -1) {
+            //TODO Tournament Mode
             depth = tournamentDepth;
         }
 
@@ -732,7 +736,7 @@ public class ChessEngine {
      * @return The eval score at the top node level.
      */
     private static int negamax(int depth) {
-        //TODO Iterative deepening;
+        //TODO Iterative deepening
         if (depth == 0 || winner() != '?') {
             return eval();
         }
@@ -755,13 +759,14 @@ public class ChessEngine {
      * @return The performed move as a string.
      */
     public static String moveAlphabeta(int depth, int duration) {
-        //TODO Iterative deepening;
+        //TODO Iterative deepening
         String bestMove = "";
         int alpha = -infinity;
         int beta = -infinity;
         int tempScore = 0;
 
         if (depth == -1) {
+            //TODO Tournament Mode
             depth = tournamentDepth;
         }
 
@@ -799,8 +804,26 @@ public class ChessEngine {
             return 0;
         }
 
+        //Load from transposition table and incorporate it
+        int oldAlpha = alpha;
+        TranspositionTable.TranspositionTableEntry entry = transpositionTable.retrieve(gameState);
+        if (entry.depth >= depth) {
+            if (entry.nodeType == TranspositionTable.nodeType.EXACT) {
+                return entry.evalScore;
+            } else if (entry.nodeType == TranspositionTable.nodeType.LOWERBOUND) {
+                alpha = Integer.max(alpha, entry.evalScore);
+            } else if (entry.nodeType == TranspositionTable.nodeType.UPPERBOUND) {
+                beta = Integer.min(beta, entry.evalScore);
+            }
+
+            if (alpha >= beta) {
+                return entry.evalScore;
+            }
+        }
+
         int score = -infinity;
 
+        //Assess possible moves, with pruning
         for (String move : movesShuffled()) {
             move(move);
             score = Integer.max(score, -alphabeta(depth - 1, -beta, -alpha));
@@ -812,6 +835,17 @@ public class ChessEngine {
                 break;
             }
         }
+
+        //Store in the transposition table
+        TranspositionTable.nodeType nodeType;
+        if (score <= oldAlpha) {
+            nodeType = TranspositionTable.nodeType.UPPERBOUND;
+        } else if (score >= beta) {
+            nodeType = TranspositionTable.nodeType.LOWERBOUND;
+        } else {
+            nodeType = TranspositionTable.nodeType.EXACT;
+        }
+        transpositionTable.store(gameState, depth, nodeType, score);
 
         return score;
     }
