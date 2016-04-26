@@ -21,7 +21,7 @@ public class TranspositionTable {
     private static long zobristWhitesPly;
     private static long zobristBlacksPly;
 
-    private TranspositionTableEntry[] table;
+    private TranspositionTableEntry[] table = new TranspositionTableEntry[tableSize];
 
     public TranspositionTable() {
         zobristPositionAndPiece = new long[State.boardHeight][State.boardWidth][ChessEngine.validPieces.size()];
@@ -35,8 +35,6 @@ public class TranspositionTable {
         }
         zobristWhitesPly = random.nextLong();
         zobristBlacksPly = random.nextLong();
-
-        table = new TranspositionTableEntry[tableSize];
     }
 
     public static long generateZobristKey(State state) {
