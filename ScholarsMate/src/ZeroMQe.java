@@ -1,8 +1,6 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 5
   Michael Salter
-  05/17/16
 */
 
 import java.util.Vector;
@@ -10,11 +8,11 @@ import java.util.Vector;
 import org.json.JSONObject;
 import org.zeromq.ZMQ;
 
-public class ZeroMQ {
+public class ZeroMQe {
     public static boolean boolRunning = false;
 
     public static void start() throws ChessError {
-        ZeroMQ.boolRunning = true;
+        ZeroMQe.boolRunning = true;
 
         ZMQ.Context contextHandle = ZMQ.context(1);
         ZMQ.Socket socketHandle = contextHandle.socket(ZMQ.PAIR);
@@ -108,13 +106,13 @@ public class ZeroMQ {
             }
 
             socketHandle.send(jsonobjectOut.toString());
-        } while (ZeroMQ.boolRunning);
+        } while (ZeroMQe.boolRunning);
 
         socketHandle.close();
         contextHandle.term();
     }
 
     public static void stop() {
-        ZeroMQ.boolRunning = false;
+        ZeroMQe.boolRunning = false;
     }
 }

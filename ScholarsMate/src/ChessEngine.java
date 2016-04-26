@@ -1,8 +1,6 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 5
   Michael Salter
-  05/17/16
 */
 
 import java.util.*;
@@ -21,7 +19,7 @@ public class ChessEngine {
     private static final int tournamentDepth = 4;
 
     //Transposition table
-    private static TranspositionTable transpositionTable = new TranspositionTable();
+    private static TranspositionTable transpositionTable;
 
     //Game rules
     public static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
@@ -648,15 +646,18 @@ public class ChessEngine {
      */
     public static Vector<String> movesEvaluated() {
         Vector<String> evaluatedMoveList = movesShuffled();
-        Collections.sort(evaluatedMoveList, (o1, o2) -> {
-            int eval1, eval2;
-            move(o1);
-            eval1 = eval();
-            undo();
-            move(o2);
-            eval2 = eval();
-            undo();
-            return eval1 - eval2;
+        Collections.sort(evaluatedMoveList, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                int eval1, eval2;
+                move(o1);
+                eval1 = eval();
+                undo();
+                move(o2);
+                eval2 = eval();
+                undo();
+                return eval1 - eval2;
+            }
         });
         return evaluatedMoveList;
     }
@@ -744,7 +745,7 @@ public class ChessEngine {
         int score = -infinity;
         for (String move : movesShuffled()) {
             move(move);
-            score = Integer.max(score, -negamax(depth - 1));
+            score = Math.max(score, -negamax(depth - 1));
             undo();
         }
 
@@ -811,9 +812,9 @@ public class ChessEngine {
             if (entry.nodeType == TranspositionTable.nodeType.EXACT) {
                 return entry.evalScore;
             } else if (entry.nodeType == TranspositionTable.nodeType.LOWERBOUND) {
-                alpha = Integer.max(alpha, entry.evalScore);
+                alpha = Math.max(alpha, entry.evalScore);
             } else if (entry.nodeType == TranspositionTable.nodeType.UPPERBOUND) {
-                beta = Integer.min(beta, entry.evalScore);
+                beta = Math.min(beta, entry.evalScore);
             }
 
             if (alpha >= beta) {
@@ -826,10 +827,10 @@ public class ChessEngine {
         //Assess possible moves, with pruning
         for (String move : movesShuffled()) {
             move(move);
-            score = Integer.max(score, -alphabeta(depth - 1, -beta, -alpha));
+            score = Math.max(score, -alphabeta(depth - 1, -beta, -alpha));
             undo();
 
-            alpha = Integer.max(alpha, score);
+            alpha = Math.max(alpha, score);
 
             if (alpha >= beta) {
                 break;

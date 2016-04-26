@@ -1,8 +1,6 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 2
   Michael Salter
-  04/19/16
 */
 
 import org.junit.Test;

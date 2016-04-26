@@ -1,8 +1,6 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 5
   Michael Salter
-  05/17/16
 */
 
 import java.security.SecureRandom;
@@ -19,7 +17,7 @@ public class TranspositionTable {
     private static int tableSize = 32768;
 
     //Zobrist key values
-    private static long[][][] zobristPositionAndPiece;
+    private static long[][][] zobristPositionAndPiece = new long[State.boardHeight][State.boardWidth][ChessEngine.validPieces.size()];;
     private static long zobristWhitesPly;
     private static long zobristBlacksPly;
 

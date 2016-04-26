@@ -1,8 +1,6 @@
 /*
   CS 442 - Advanced AI: Combinatorial Games
-  Chess player, Homework 5
   Michael Salter
-  05/17/16
 */
 
 public class main {
@@ -17,6 +15,6 @@ public class main {
         assert main.clientName.length() < 16;
         assert !main.clientName.contains(" ");
 
-        ZeroMQ.start();
+        ZeroMQe.start();
     }
 }
