@@ -8,11 +8,11 @@ import java.util.Vector;
 import org.json.JSONObject;
 import org.zeromq.ZMQ;
 
-public class ZeroMQe {
+public class ZeroMQ {
     public static boolean boolRunning = false;
 
     public static void start() throws ChessError {
-        ZeroMQe.boolRunning = true;
+        ZeroMQ.boolRunning = true;
 
         ZMQ.Context contextHandle = ZMQ.context(1);
         ZMQ.Socket socketHandle = contextHandle.socket(ZMQ.PAIR);
@@ -106,13 +106,13 @@ public class ZeroMQe {
             }
 
             socketHandle.send(jsonobjectOut.toString());
-        } while (ZeroMQe.boolRunning);
+        } while (ZeroMQ.boolRunning);
 
         socketHandle.close();
         contextHandle.term();
     }
 
     public static void stop() {
-        ZeroMQe.boolRunning = false;
+        ZeroMQ.boolRunning = false;
     }
 }

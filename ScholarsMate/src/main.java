@@ -15,6 +15,6 @@ public class main {
         assert main.clientName.length() < 16;
         assert !main.clientName.contains(" ");
 
-        ZeroMQe.start();
+        ZeroMQ.start();
     }
 }
