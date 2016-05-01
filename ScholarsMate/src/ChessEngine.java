@@ -18,10 +18,9 @@ public class ChessEngine {
 
     private static final int tournamentDepth = 4;
 
-    //Transposition table
-    private static TranspositionTable transpositionTable;
-
     //Game rules
+    public static final int boardWidth = 5; //columns
+    public static final int boardHeight = 6; //rows
     public static final char[] columnNames = {'a', 'b', 'c', 'd', 'e'};
     private static final char startingBoard[][] = {
             {'k', 'q', 'b', 'n', 'r'},
@@ -41,11 +40,14 @@ public class ChessEngine {
 
     public static State gameState;
 
+    //Transposition table
+    private static TranspositionTable transpositionTable = new TranspositionTable(boardHeight, boardWidth, validPieces.size());
+
     /**
      * Set game state to starting setup.
      */
     public static void reset() {
-        gameState = new State();
+        gameState = new State(boardHeight, boardWidth);
         gameState.setBoard(startingBoard);
         gameState.setMoveNumber(startingMove);
         gameState.setIsWhitesPly(startingIsWhitesPly);
@@ -105,10 +107,10 @@ public class ChessEngine {
             throw new ChessError("Invalid turn format: " + moveAndPly[1]);
         }*/
 
-        char[][] newBoard = new char[State.boardHeight][State.boardWidth];
+        char[][] newBoard = new char[boardHeight][boardWidth];
         char a;
-        for (int i = 0; i < State.boardHeight; i++) {
-            for (int j = 0; j < State.boardWidth; j++) {
+        for (int i = 0; i < boardHeight; i++) {
+            for (int j = 0; j < boardWidth; j++) {
                 a = strInSplit[i + 1].charAt(j);
                 /*//Validation test
                 if (!validPieces.contains(a)) {
@@ -192,7 +194,7 @@ public class ChessEngine {
      * @return True if the move is within bounds, false otherwise.
      */
     public static boolean isValid(int intX, int intY) {
-        return (intX >= 0 && intX < State.boardWidth && intY >= 0 && intY < State.boardHeight);
+        return (intX >= 0 && intX < boardWidth && intY >= 0 && intY < boardHeight);
     }
 
     /**
@@ -317,8 +319,8 @@ public class ChessEngine {
         Vector<Move> moveList = new Vector<>();
         char position;
 
-        for (int row = 0; row < State.boardHeight; row++) {
-            for (int column = 0; column < State.boardWidth; column++) {
+        for (int row = 0; row < boardHeight; row++) {
+            for (int column = 0; column < boardWidth; column++) {
                 position = gameState.getPosition(row, column);
                 if (isOwn(position)) {
                     switch (position) {

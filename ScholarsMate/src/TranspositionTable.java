@@ -12,32 +12,54 @@ public class TranspositionTable {
         public int evalScore = 0;
         public nodeType nodeType = TranspositionTable.nodeType.UNDEFINED;
         public int depth = 0;
+
+        public TranspositionTableEntry() {
+            evalScore = 0;
+            nodeType = TranspositionTable.nodeType.UNDEFINED;
+            depth = 0;
+        }
+
+        public TranspositionTableEntry(int depth, int evalScore, nodeType nodeType) {
+            this.depth = depth;
+            this.evalScore = evalScore;
+            this.nodeType = nodeType;
+        }
     }
 
     private static int tableSize = 32768;
 
     //Zobrist key values
-    private static long[][][] zobristPositionAndPiece = new long[State.boardHeight][State.boardWidth][ChessEngine.validPieces.size()];;
-    private static long zobristWhitesPly;
-    private static long zobristBlacksPly;
+    private long[][][] zobristPositionAndPiece;
+    private long zobristWhitesPly;
+    private long zobristBlacksPly;
 
-    private TranspositionTableEntry[] table = new TranspositionTableEntry[tableSize];
+    private int boardHeight;
+    private int boardWidth;
 
-    public TranspositionTable() {
-        zobristPositionAndPiece = new long[State.boardHeight][State.boardWidth][ChessEngine.validPieces.size()];
+    private TranspositionTableEntry[] table;
+
+    public TranspositionTable(int boardHeight, int boardWidth, int piecesCount) {
+        this.boardHeight = boardHeight;
+        this.boardWidth = boardWidth;
+        zobristPositionAndPiece = new long[boardHeight][boardWidth][piecesCount];
         SecureRandom random = new SecureRandom();
-        for (int i = 0; i < State.boardHeight; i++) {
-            for (int j = 0; j < State.boardWidth; j++) {
-                for (int k = 0; k < ChessEngine.validPieces.size(); k++) {
+        for (int i = 0; i < boardHeight; i++) {
+            for (int j = 0; j < boardWidth; j++) {
+                for (int k = 0; k < piecesCount; k++) {
                     zobristPositionAndPiece[i][j][k] = random.nextLong();
                 }
             }
         }
         zobristWhitesPly = random.nextLong();
         zobristBlacksPly = random.nextLong();
+
+        table = new TranspositionTableEntry[tableSize];
+        for (int i = 0; i < tableSize; i++) {
+            table[i] = new TranspositionTableEntry();
+        }
     }
 
-    public static long generateZobristKey(State state) {
+    public long generateZobristKey(State state) {
         //TODO: Allow update of key without recomputation
         long zobristKey = 0;
 
@@ -49,8 +71,8 @@ public class TranspositionTable {
         }
 
         //Key affected by position and piece, assuming it is non-empty
-        for (int row = 0; row < State.boardHeight; row++) {
-            for (int column = 0; column < State.boardWidth; column++) {
+        for (int row = 0; row < boardHeight; row++) {
+            for (int column = 0; column < boardWidth; column++) {
                 int piece = -1;
                 switch (state.getPosition(row, column)) {
                     case 'p':
@@ -101,15 +123,21 @@ public class TranspositionTable {
     }
 
     public TranspositionTableEntry retrieve(State state) {
-        return table[(int) (generateZobristKey(state) % tableSize)];
+        int index = (int) (generateZobristKey(state) % tableSize);
+        if (index < 0) {
+            index *= -1;
+        }
+
+        return table[index];
     }
 
     public void store(State state, int depth, TranspositionTable.nodeType nodeType, int evalScore) {
         int index = (int) (generateZobristKey(state) % tableSize);
+        if (index < 0) {
+            index *= -1;
+        }
         if (table[index].depth <= depth) {
-            table[index].depth = depth;
-            table[index].nodeType = nodeType;
-            table[index].evalScore = evalScore;
+            table[index] = new TranspositionTableEntry(depth, evalScore, nodeType);
         }
     }
 }

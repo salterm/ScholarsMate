@@ -4,13 +4,14 @@
 */
 
 public class State {
-    public static final int boardWidth = 5; //columns
-    public static final int boardHeight = 6; //rows
+    private int boardHeight, boardWidth;
     private char[][] board; //[row][column]
     private int moveNumber;
     private boolean isWhitesPly;
 
-    public State() {
+    public State(int boardHeight, int boardWidth) {
+        this.boardHeight = boardHeight;
+        this.boardWidth = boardWidth;
         this.board = new char[boardHeight][boardWidth];
         moveNumber = 1;
         isWhitesPly = true;
