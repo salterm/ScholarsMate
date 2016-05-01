@@ -135,8 +135,8 @@ public class ChessEngine {
      * @return Character specifying victory status of current game state.
      */
     public static char winner() throws ChessError {
-        //Check move count
-        if (gameState.getMoveNumber() > 40) {
+        //Check move count, always a draw past move 41
+        if (gameState.getMoveNumber() > 42) {
             return '=';
         } else {
             //Check who has kings on the board
@@ -172,8 +172,13 @@ public class ChessEngine {
                         return 'W';
                     }
                 } else {
-                    //Game is still open
-                    return '?';
+                    //Draw
+                    if (gameState.getMoveNumber() == 41) {
+                        return '=';
+                    } else {
+                        //Game is still open
+                        return '?';
+                    }
                 }
             }
         }
