@@ -9,24 +9,27 @@ public class TranspositionTable {
     public enum nodeType {EXACT, LOWERBOUND, UPPERBOUND, UNDEFINED}
 
     public class TranspositionTableEntry {
+        public long zobristKey = 0;
         public int evalScore = 0;
         public nodeType nodeType = TranspositionTable.nodeType.UNDEFINED;
         public int depth = 0;
 
         public TranspositionTableEntry() {
+            zobristKey = 0;
             evalScore = 0;
             nodeType = TranspositionTable.nodeType.UNDEFINED;
             depth = 0;
         }
 
-        public TranspositionTableEntry(int depth, int evalScore, nodeType nodeType) {
+        public TranspositionTableEntry(long zobristKey, int depth, int evalScore, nodeType nodeType) {
+            this.zobristKey = zobristKey;
             this.depth = depth;
             this.evalScore = evalScore;
             this.nodeType = nodeType;
         }
     }
 
-    private static int tableSize = 32768;
+    private static int tableSize = 1048576;
 
     //Zobrist key values
     private long[][][] zobristPositionAndPiece;
@@ -123,21 +126,27 @@ public class TranspositionTable {
     }
 
     public TranspositionTableEntry retrieve(State state) {
-        int index = (int) (generateZobristKey(state) % tableSize);
+        long zobristKey = generateZobristKey(state);
+        int index = (int) (zobristKey % tableSize);
         if (index < 0) {
             index *= -1;
         }
 
-        return table[index];
+        if (zobristKey == table[index].zobristKey) {
+            return table[index];
+        } else {
+            return new TranspositionTableEntry();
+        }
     }
 
     public void store(State state, int depth, TranspositionTable.nodeType nodeType, int evalScore) {
-        int index = (int) (generateZobristKey(state) % tableSize);
+        long zobristKey = generateZobristKey(state);
+        int index = (int) (zobristKey % tableSize);
         if (index < 0) {
             index *= -1;
         }
         if (table[index].depth <= depth) {
-            table[index] = new TranspositionTableEntry(depth, evalScore, nodeType);
+            table[index] = new TranspositionTableEntry(zobristKey, depth, evalScore, nodeType);
         }
     }
 }

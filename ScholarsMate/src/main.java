@@ -15,6 +15,40 @@ public class main {
         assert main.clientName.length() < 16;
         assert !main.clientName.contains(" ");
 
+        /*
+        //DEBUG
+        int numGames = 10;
+        int depth = 4;
+        int duration = 0;
+        System.out.println("Negamax calls: " + playGame("negamax", depth, duration, numGames));
+        System.out.println("Alphabeta calls: " + playGame("alphabeta", depth, duration, numGames));
+        System.out.println("Alphabeta with Transposition Tables calls: " + playGame("alphabetaTrans", depth, duration, numGames));
+        */
+
         ZeroMQ.start();
+    }
+
+    public static long playGame(String type, int depth, int duration, int numGames) {
+        if (type.equals("alphabetaTrans")) {
+            ChessEngine.useTranspositionTables = true;
+        } else {
+            ChessEngine.useTranspositionTables = false;
+        }
+
+        long avgEvalCalls = 0;
+
+        for (int i = 0; i < numGames; i++) {
+            ChessEngine.reset();
+            while (ChessEngine.winner() == '?') {
+                if (type.equals("negamax")) {
+                    ChessEngine.moveNegamax(depth, duration);
+                } else if (type.equals("alphabeta") || type.equals("alphabetaTrans")) {
+                    ChessEngine.moveAlphabeta(depth, duration);
+                }
+            }
+            avgEvalCalls += ChessEngine.evalCalls;
+        }
+
+        return avgEvalCalls / numGames;
     }
 }

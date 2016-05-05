@@ -6,6 +6,11 @@
 import java.util.*;
 
 public class ChessEngine {
+    //TODO: Remove all DEBUG blocks
+    //DEBUG
+    public static boolean useTranspositionTables = true;
+    public static long evalCalls = 0;
+
     //Evaluation heuristic values
     private static final int pawnValue = 100;
     private static final int rookValue = 500;
@@ -29,10 +34,11 @@ public class ChessEngine {
             {'.', '.', '.', '.', '.'},
             {'P', 'P', 'P', 'P', 'P'},
             {'R', 'N', 'B', 'Q', 'K'}};
-    private static final int startingMove = 1;
+    private static final int startingMoveNumber = 1;
     private static final boolean startingIsWhitesPly = true;
     public static final ArrayList<Character> validPieces = new ArrayList<>(
             Arrays.asList('k', 'q', 'b', 'n', 'r', 'p', 'K', 'Q', 'B', 'N', 'R', 'P'));
+    public static final char emptySpace = '.';
     private static final String whiteTurn = "W";
     private static final String blackTurn = "B";
 
@@ -49,8 +55,11 @@ public class ChessEngine {
     public static void reset() {
         gameState = new State(boardHeight, boardWidth);
         gameState.setBoard(startingBoard);
-        gameState.setMoveNumber(startingMove);
+        gameState.setMoveNumber(startingMoveNumber);
         gameState.setIsWhitesPly(startingIsWhitesPly);
+
+        //DEBUG
+        evalCalls = 0;
     }
 
     /**
@@ -70,55 +79,39 @@ public class ChessEngine {
     public static void boardSet(String strIn) {
         String[] strInSplit = strIn.split("\\n");
 
-/*        //Validation test
-        if (strInSplit.length != 7) {
-            throw new ChessError("Invalid state line count: " + strInSplit.length);
-        }*/
+        assert strInSplit.length == 7 : "Invalid board format: " + strInSplit.length;
 
         String[] moveAndPly = strInSplit[0].split("\\s");
 
-/*        //Validation test
-        if (moveAndPly.length != 2) {
-            throw new ChessError("Invalid first line: " + strInSplit[0]);
-        }*/
+        //Validation test
+        assert moveAndPly.length == 2 : "Invalid first line: " + strInSplit[0];
 
-/*        //Validation test
+        //Validation test
         for (int i = 1; i < strInSplit.length; i++) {
             String s = strInSplit[i];
-            if (s.length() != 5) {
-                throw new ChessError("Invalid board line: " + s);
-            }
-        }*/
+            assert (s.length() == 5) : "Invalid board line: " + s;
+        }
 
         int newMove = Integer.valueOf(moveAndPly[0]);
 
-/*        //Validation test
-        if (newMove < 1 || newMove > 41) {
-            throw new ChessError("Invalid move number: " + newMove);
-        }*/
+        //Validation test
+        assert (newMove >= 1 || newMove <= 41) : "Invalid move number: " + newMove;
 
-        boolean newIsWhitesPly;
-        if (moveAndPly[1].equals(whiteTurn)) {
-            newIsWhitesPly = true;
-        } else /*if (moveAndPly[1].equals(blackTurn))*/ {
-            newIsWhitesPly = false;
-        } /*else {
-            //Validation test
-            throw new ChessError("Invalid turn format: " + moveAndPly[1]);
-        }*/
+        //Validation test
+        assert (moveAndPly[1].equals(whiteTurn) || moveAndPly[1].equals(blackTurn)) : "Invalid turn format: " + moveAndPly[1];
+
+        boolean newIsWhitesPly = moveAndPly[1].equals(whiteTurn);
 
         char[][] newBoard = new char[boardHeight][boardWidth];
         char a;
         for (int i = 0; i < boardHeight; i++) {
             for (int j = 0; j < boardWidth; j++) {
                 a = strInSplit[i + 1].charAt(j);
-                /*//Validation test
-                if (!validPieces.contains(a)) {
-                    throw new ChessError("Invalid game piece: " + a);
-                } else*/
-                {
-                    newBoard[i][j] = a;
-                }
+
+                //Validation test
+                assert validPieces.contains(a) || a == emptySpace: "Invalid game piece: " + a;
+
+                newBoard[i][j] = a;
             }
         }
 
@@ -267,6 +260,12 @@ public class ChessEngine {
      * @return the eval score.
      */
     public static int eval() {
+        //DEBUG
+        evalCalls++;
+
+        if (winner() == '=') {
+            return 0;
+        }
         int eval = 0;
         int pieceEval = 0;
         for (char[] ca : gameState.getBoard()) {
@@ -770,7 +769,7 @@ public class ChessEngine {
         //TODO Iterative deepening
         String bestMove = "";
         int alpha = -infinity;
-        int beta = -infinity;
+        int beta = infinity;
         int tempScore = 0;
 
         if (depth == -1) {
@@ -779,9 +778,21 @@ public class ChessEngine {
         }
 
         for (String move : movesShuffled()) {
+            //Validation Test
+            String beforeMove = boardGet();
+
             move(move);
-            tempScore = -alphabeta(depth - 1, -beta, -alpha);
+            //DEBUG
+            if (useTranspositionTables) {
+                tempScore = -alphabetaTrans(depth -1, -beta, -alpha);
+            } else {
+                tempScore = -alphabeta(depth - 1, -beta, -alpha);
+            }
             undo();
+
+            //Validation Test
+            String afterMove = boardGet();
+            assert beforeMove.equals(afterMove);
 
             if (tempScore > alpha) {
                 bestMove = move;
@@ -802,14 +813,46 @@ public class ChessEngine {
      * @return The eval score at the top node level.
      */
     private static int alphabeta(int depth, int alpha, int beta) {
-        if (depth == 0) {
+        if (depth == 0 || winner() != '?') {
             return eval();
         }
-        char winner = winner();
-        if (winner == 'B' || winner == 'W') {
+
+        int score = -infinity;
+
+        //Assess possible moves, with pruning
+        for (String move : movesShuffled()) {
+            //Validation Test
+            String beforeMove = boardGet();
+
+            move(move);
+            score = Math.max(score, -alphabeta(depth - 1, -beta, -alpha));
+            undo();
+
+            //Validation Test
+            String afterMove = boardGet();
+            assert beforeMove.equals(afterMove);
+
+            alpha = Math.max(alpha, score);
+
+            if (alpha >= beta) {
+                break;
+            }
+        }
+
+        return score;
+    }
+
+    /**
+     * Performs negamax adversary search and returns eval score at top node level, utilizing alpha beta pruning and transposition tables.
+     *
+     * @param depth How deep the adversary search tree should be.
+     * @param alpha alpha
+     * @param beta  beta
+     * @return The eval score at the top node level.
+     */
+    private static int alphabetaTrans(int depth, int alpha, int beta) {
+        if (depth == 0 || winner() != '?') {
             return eval();
-        } else if (winner == '=') {
-            return 0;
         }
 
         //Load from transposition table and incorporate it
@@ -833,9 +876,16 @@ public class ChessEngine {
 
         //Assess possible moves, with pruning
         for (String move : movesShuffled()) {
+            //Validation Test
+            String beforeMove = boardGet();
+
             move(move);
-            score = Math.max(score, -alphabeta(depth - 1, -beta, -alpha));
+            score = Math.max(score, -alphabetaTrans(depth - 1, -beta, -alpha));
             undo();
+
+            //Validation Test
+            String afterMove = boardGet();
+            assert beforeMove.equals(afterMove);
 
             alpha = Math.max(alpha, score);
 
@@ -853,7 +903,6 @@ public class ChessEngine {
         } else {
             nodeType = TranspositionTable.nodeType.EXACT;
         }
-        transpositionTable.store(gameState, depth, nodeType, score);
 
         return score;
     }
