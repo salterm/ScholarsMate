@@ -15,17 +15,17 @@ public class main {
         assert main.clientName.length() < 16;
         assert !main.clientName.contains(" ");
 
-        /*
+
         //DEBUG
-        int numGames = 10;
-        int depth = 4;
+        int numGames = 2;
+        int depth = 3;
         int duration = 0;
         System.out.println("Negamax calls: " + playGame("negamax", depth, duration, numGames));
         System.out.println("Alphabeta calls: " + playGame("alphabeta", depth, duration, numGames));
         System.out.println("Alphabeta with Transposition Tables calls: " + playGame("alphabetaTrans", depth, duration, numGames));
-        */
 
-        ZeroMQ.start();
+
+        //ZeroMQ.start();
     }
 
     public static long playGame(String type, int depth, int duration, int numGames) {

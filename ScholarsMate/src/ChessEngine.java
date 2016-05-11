@@ -903,6 +903,7 @@ public class ChessEngine {
         } else {
             nodeType = TranspositionTable.nodeType.EXACT;
         }
+        transpositionTable.store(gameState, depth, nodeType, score);
 
         return score;
     }
