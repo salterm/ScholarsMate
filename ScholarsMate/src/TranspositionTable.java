@@ -42,6 +42,10 @@ public class TranspositionTable {
     private TranspositionTableEntry[] table;
 
     public TranspositionTable(int boardHeight, int boardWidth, int piecesCount) {
+
+        //DEBUG
+        System.out.println("Transposition Table initialization");
+
         this.boardHeight = boardHeight;
         this.boardWidth = boardWidth;
         zobristPositionAndPiece = new long[boardHeight][boardWidth][piecesCount];

@@ -17,25 +17,61 @@ public class main {
 
 
         //DEBUG
-        int numGames = 2;
-        int depth = 3;
+        /*
+        int numGames = 25;
+        int depth = 6;
         int duration = 0;
-        System.out.println("Negamax calls: " + playGame("negamax", depth, duration, numGames));
-        System.out.println("Alphabeta calls: " + playGame("alphabeta", depth, duration, numGames));
-        System.out.println("Alphabeta with Transposition Tables calls: " + playGame("alphabetaTrans", depth, duration, numGames));
+        long startTime, endTime, totalStartTime, totalEndTime;
 
+        totalStartTime = System.nanoTime();
 
-        //ZeroMQ.start();
+        startTime = System.nanoTime();
+        System.out.println("init start");
+        ChessEngine.reset();
+        endTime = System.nanoTime();
+        System.out.println("init done " + ((endTime - startTime) / 1000000) + " ms");
+
+        startTime = System.nanoTime();
+        System.out.println("ab start");
+        tuple alphabeta = playGame("alphabeta", depth, duration, numGames);
+        endTime = System.nanoTime();
+        System.out.println("ab done " + ((endTime - startTime) / 1000000) + " ms");
+
+        startTime = System.nanoTime();
+        System.out.println("abt start");
+        tuple alphabetatrans = playGame("alphabetaTrans", depth, duration, numGames);
+        endTime = System.nanoTime();
+        System.out.println("abt done " + ((endTime - startTime) / 1000000) + " ms");
+
+        totalEndTime = System.nanoTime();
+        System.out.println("total: " + ((totalEndTime - totalStartTime) / 1000000) + " ms");
+
+        System.out.println();
+        System.out.println("Alphabeta calls: " + alphabeta.avgEvalCalls);
+        System.out.println("Alphabeta with Transposition Tables calls: " + alphabetatrans.avgEvalCalls);
+        System.out.println();
+        System.out.println("Alphabeta moves: " + alphabeta.avgMoves);
+        System.out.println("Alphabeta with Transposition Tables moves: " + alphabetatrans.avgMoves);
+        */
+
+        ZeroMQ.start();
     }
 
-    public static long playGame(String type, int depth, int duration, int numGames) {
-        if (type.equals("alphabetaTrans")) {
-            ChessEngine.useTranspositionTables = true;
-        } else {
-            ChessEngine.useTranspositionTables = false;
-        }
+    private static class tuple {
+        public long avgMoves;
+        public long avgEvalCalls;
 
-        long avgEvalCalls = 0;
+        tuple (long avgMoves, long avgEvalCalls) {
+            this.avgMoves = avgMoves;
+            this.avgEvalCalls = avgEvalCalls;
+        }
+    }
+
+    public static tuple playGame(String type, int depth, int duration, int numGames) {
+        ChessEngine.useTranspositionTables = type.equals("alphabetaTrans");
+
+        long totalEvalCalls = 0;
+        long totalMoves = 0;
 
         for (int i = 0; i < numGames; i++) {
             ChessEngine.reset();
@@ -45,10 +81,12 @@ public class main {
                 } else if (type.equals("alphabeta") || type.equals("alphabetaTrans")) {
                     ChessEngine.moveAlphabeta(depth, duration);
                 }
+                totalMoves++;
             }
-            avgEvalCalls += ChessEngine.evalCalls;
+            System.out.println("Win: " + ChessEngine.winner() + " Move: " + ChessEngine.gameState.getMoveNumber());
+            totalEvalCalls += ChessEngine.evalCalls;
         }
 
-        return avgEvalCalls / numGames;
+        return new tuple(totalMoves / numGames, totalEvalCalls / numGames);
     }
 }

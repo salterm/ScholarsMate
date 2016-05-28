@@ -313,8 +313,7 @@ public class ChessEngine {
      *
      * @return list of valid moves for the current state.
      */
-    public static Vector<String> moves() {
-        Vector<String> outputMoveList = new Vector<>();
+    public static Vector<Move> moves() {
         Vector<Move> moveList = new Vector<>();
         char position;
 
@@ -627,11 +626,7 @@ public class ChessEngine {
             }
         }
 
-        for (Move m : moveList) {
-            outputMoveList.add(m.toString());
-        }
-
-        return outputMoveList;
+        return moveList;
     }
 
     /**
@@ -639,8 +634,8 @@ public class ChessEngine {
      *
      * @return A vector of possible moves, randomly shuffled.
      */
-    public static Vector<String> movesShuffled() {
-        Vector<String> shuffledMoveList = moves();
+    public static Vector<Move> movesShuffled() {
+        Vector<Move> shuffledMoveList = moves();
         Collections.shuffle(shuffledMoveList);
         return shuffledMoveList;
     }
@@ -650,11 +645,10 @@ public class ChessEngine {
      *
      * @return A list of moves as strings in ascending order by their eval scores.
      */
-    public static Vector<String> movesEvaluated() {
-        Vector<String> evaluatedMoveList = movesShuffled();
-        Collections.sort(evaluatedMoveList, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
+    public static Vector<Move> movesEvaluated() {
+        Vector<Move> evaluatedMoveList = movesShuffled();
+        Collections.sort(evaluatedMoveList, new Comparator<Move>() {
+            public int compare(Move o1, Move o2) {
                 int eval1, eval2;
                 move(o1);
                 eval1 = eval();
@@ -671,13 +665,12 @@ public class ChessEngine {
     /**
      * Executes a move.
      *
-     * @param charIn The move in question.
+     * @param move The move in question.
      */
-    public static void move(String charIn) {
-        if (charIn != null && !charIn.isEmpty()) {
-            Move m = new Move(charIn, gameState);
-            historyStack.push(m);
-            gameState.move(m);
+    public static void move(Move move) {
+        if (move != null) {
+            historyStack.push(move);
+            gameState.move(move);
         }
     }
 
@@ -686,8 +679,8 @@ public class ChessEngine {
      *
      * @return The random move performed as a string.
      */
-    public static String moveRandom() {
-        String randomMove = movesShuffled().firstElement();
+    public static Move moveRandom() {
+        Move randomMove = movesShuffled().firstElement();
         move(randomMove);
         return randomMove;
     }
@@ -697,8 +690,8 @@ public class ChessEngine {
      *
      * @return The "best" move performed as a string.
      */
-    public static String moveGreedy() {
-        String greedyMove = movesEvaluated().firstElement();
+    public static Move moveGreedy() {
+        Move greedyMove = movesEvaluated().firstElement();
         move(greedyMove);
         return greedyMove;
     }
@@ -710,9 +703,9 @@ public class ChessEngine {
      * @param duration How much time is left to perform the search. (Ignored unless in "Tournament Mode".)
      * @return The performed move as a string.
      */
-    public static String moveNegamax(int depth, int duration) {
+    public static Move moveNegamax(int depth, int duration) {
         //TODO Iterative deepening
-        String bestMove = "";
+        Move bestMove = null;
         int highestScore = -infinity;
         int tempScore = 0;
 
@@ -721,7 +714,7 @@ public class ChessEngine {
             depth = tournamentDepth;
         }
 
-        for (String move : movesShuffled()) {
+        for (Move move : movesShuffled()) {
             move(move);
             tempScore = -negamax(depth - 1);
             undo();
@@ -749,7 +742,7 @@ public class ChessEngine {
         }
 
         int score = -infinity;
-        for (String move : movesShuffled()) {
+        for (Move move : movesShuffled()) {
             move(move);
             score = Math.max(score, -negamax(depth - 1));
             undo();
@@ -765,9 +758,9 @@ public class ChessEngine {
      * @param duration How much time is left to perform the search. (Ignored unless in "Tournament Mode".)
      * @return The performed move as a string.
      */
-    public static String moveAlphabeta(int depth, int duration) {
+    public static Move moveAlphabeta(int depth, int duration) {
         //TODO Iterative deepening
-        String bestMove = "";
+        Move bestMove = null;
         int alpha = -infinity;
         int beta = infinity;
         int tempScore = 0;
@@ -777,11 +770,12 @@ public class ChessEngine {
             depth = tournamentDepth;
         }
 
-        for (String move : movesShuffled()) {
+        for (Move move : movesShuffled()) {
             //Validation Test
             String beforeMove = boardGet();
 
             move(move);
+
             //DEBUG
             if (useTranspositionTables) {
                 tempScore = -alphabetaTrans(depth -1, -beta, -alpha);
@@ -820,7 +814,7 @@ public class ChessEngine {
         int score = -infinity;
 
         //Assess possible moves, with pruning
-        for (String move : movesShuffled()) {
+        for (Move move : movesShuffled()) {
             //Validation Test
             String beforeMove = boardGet();
 
@@ -875,7 +869,7 @@ public class ChessEngine {
         int score = -infinity;
 
         //Assess possible moves, with pruning
-        for (String move : movesShuffled()) {
+        for (Move move : movesShuffled()) {
             //Validation Test
             String beforeMove = boardGet();
 

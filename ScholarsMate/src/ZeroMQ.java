@@ -56,37 +56,37 @@ public class ZeroMQ {
                 jsonobjectOut.put("intReturn", ChessEngine.eval());
 
             } else if (jsonobjectIn.getString("strFunction").equals("chess_moves")) {
-                Vector<String> strOut = ChessEngine.moves();
+                Vector<Move> strOut = ChessEngine.moves();
 
                 jsonobjectOut.put("intOut", strOut.size());
                 jsonobjectOut.put("strOut", "");
 
-                for (String aStrOut : strOut) {
-                    jsonobjectOut.put("strOut", jsonobjectOut.get("strOut") + aStrOut);
+                for (Move move : strOut) {
+                    jsonobjectOut.put("strOut", jsonobjectOut.get("strOut") + move.toString());
                 }
 
             } else if (jsonobjectIn.getString("strFunction").equals("chess_movesShuffled")) {
-                Vector<String> strOut = ChessEngine.movesShuffled();
+                Vector<Move> strOut = ChessEngine.movesShuffled();
 
                 jsonobjectOut.put("intOut", strOut.size());
                 jsonobjectOut.put("strOut", "");
 
-                for (String aStrOut : strOut) {
-                    jsonobjectOut.put("strOut", jsonobjectOut.get("strOut") + aStrOut);
+                for (Move move : strOut) {
+                    jsonobjectOut.put("strOut", jsonobjectOut.get("strOut") + move.toString());
                 }
 
             } else if (jsonobjectIn.getString("strFunction").equals("chess_movesEvaluated")) {
-                Vector<String> strOut = ChessEngine.movesEvaluated();
+                Vector<Move> strOut = ChessEngine.movesEvaluated();
 
                 jsonobjectOut.put("intOut", strOut.size());
                 jsonobjectOut.put("strOut", "");
 
-                for (String aStrOut : strOut) {
-                    jsonobjectOut.put("strOut", jsonobjectOut.get("strOut") + aStrOut);
+                for (Move move : strOut) {
+                    jsonobjectOut.put("strOut", jsonobjectOut.get("strOut") + move.toString());
                 }
 
             } else if (jsonobjectIn.getString("strFunction").equals("chess_move")) {
-                ChessEngine.move(jsonobjectIn.getString("strIn"));
+                ChessEngine.move(new Move(jsonobjectIn.getString("strIn"), ChessEngine.gameState));
 
             } else if (jsonobjectIn.getString("strFunction").equals("chess_moveRandom")) {
                 jsonobjectOut.put("strOut", ChessEngine.moveRandom());
