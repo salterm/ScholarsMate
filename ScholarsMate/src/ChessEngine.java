@@ -8,7 +8,6 @@ import java.util.*;
 public class ChessEngine {
     //TODO: Remove all DEBUG blocks
     //DEBUG
-    public static boolean useTranspositionTables = true;
     public static long evalCalls = 0;
 
     //Evaluation heuristic values
@@ -21,7 +20,16 @@ public class ChessEngine {
 
     private static final int infinity = 100000000;
 
+    //Iterative deepening and timing control
     private static final int tournamentDepth = 4;
+    private static final int tournamentDuration = 300000; //5 minutes, in milliseconds
+    private static final int tournamentMaxDepth = 11; //The furthest ahead we look, ever.
+    private static final int tournamentMinDepth = 6; //Where we begin iterative deepening and the shallowest we go, ever.
+    private static final int tournamentTimeForMove = 7200; //For 40 moves, 7500ms is the average time for move; 7200 is a little shy to be on the safe side.
+    private static int timeCounter = 0; //A counter to keep us from actually checking the system time too frequently
+    private static final int timeCounterThreshold = 1000; //An arbitrary threshold to keep us from actually checking the system time too frequently
+    private static long cachedTime = 0; //The time in milliseconds the last time we checked
+    private static long tournamentTimeLimit = 0; //Future (ideally) time after which we should halt our search
 
     //Game rules
     public static final int boardWidth = 5; //columns
@@ -109,7 +117,7 @@ public class ChessEngine {
                 a = strInSplit[i + 1].charAt(j);
 
                 //Validation test
-                assert validPieces.contains(a) || a == emptySpace: "Invalid game piece: " + a;
+                assert validPieces.contains(a) || a == emptySpace : "Invalid game piece: " + a;
 
                 newBoard[i][j] = a;
             }
@@ -751,6 +759,152 @@ public class ChessEngine {
         return score;
     }
 
+    public static Move moveAlphabeta(int depth, int duration) {
+        //Get the time after which we should stop trying
+        cachedTime = System.currentTimeMillis();
+        tournamentTimeLimit = cachedTime + tournamentTimeForMove;
+
+        Move bestMove = null;
+
+        //If we're in Tournament Mode
+        if (depth == -1) {
+
+            //Iteratively deepen the search until we run out of time
+            for (depth = tournamentMinDepth; depth <= tournamentMaxDepth; depth++) {
+                //DEBUG
+                System.out.println("time: " + cachedTime + " ms, limit: " + tournamentTimeLimit + " ms, depth: " + depth);
+
+                Move candidateBestMove = null;
+                int alpha = -infinity;
+                int beta = infinity;
+                int tempScore = 0;
+
+                //Negamax search
+                try {
+                    for (Move move : movesShuffled()) {
+
+                        //DEBUG
+                        String beforeMove = boardGet();
+
+                        //Try the move
+                        move(move);
+
+                        //Evaluate the score at the deepest level of our search
+                        tempScore = -alphabeta(depth - 1, -beta, -alpha);
+
+                        //Undo the move
+                        undo();
+
+                        //DEBUG
+                        String afterMove = boardGet();
+                        assert beforeMove.equals(afterMove);
+
+                        //If our move's score is better than the highest remembered score
+                        if (tempScore > alpha) {
+                            candidateBestMove = move;
+                            alpha = tempScore;
+                        }
+                    }
+                } catch (ChessTimeout e) {
+                    //If we're over time, don't deepen the search!
+                    undo();
+                    break;
+                }
+
+                //Remember the best move found at this depth
+                bestMove = candidateBestMove;
+            }
+
+            //Move and return the move
+            move(bestMove);
+            return bestMove;
+        } else {
+            return moveAlphabetaUniterative(depth, duration);
+        }
+
+
+    }
+
+    private static int alphabeta(int depth, int alpha, int beta) throws ChessTimeout {
+        //Try to avoid checking the time too often!
+        timeCounter++;
+        if (timeCounter > timeCounterThreshold) {
+            timeCounter = 0;
+            cachedTime = System.currentTimeMillis();
+        }
+
+        //Check whether we have time for this or not
+        if (cachedTime > tournamentTimeLimit) {
+            //DEBUG
+            System.out.println("Outta time!");
+
+            throw new ChessTimeout("");
+        }
+
+        //If we're past our depth or the game is over, just return the eval score
+        if (depth == 0 || winner() != '?') {
+            return eval();
+        }
+
+        //Load from transposition table and incorporate it
+        int oldAlpha = alpha;
+        TranspositionTable.TranspositionTableEntry entry = transpositionTable.retrieve(gameState);
+        if (entry.depth >= depth) {
+
+            if (entry.nodeType == TranspositionTable.nodeType.EXACT) {
+                return entry.evalScore;
+            } else if (entry.nodeType == TranspositionTable.nodeType.LOWERBOUND) {
+                alpha = Math.max(alpha, entry.evalScore);
+            } else if (entry.nodeType == TranspositionTable.nodeType.UPPERBOUND) {
+                beta = Math.min(beta, entry.evalScore);
+            }
+
+            if (alpha >= beta) {
+                return entry.evalScore;
+            }
+        }
+
+        int score = -infinity;
+
+        //Assess possible moves, with pruning
+        for (Move move : movesShuffled()) {
+            //DEBUG
+            String beforeMove = boardGet();
+
+            move(move);
+            try {
+                score = Math.max(score, -alphabeta(depth - 1, -beta, -alpha));
+            } catch (ChessTimeout e) {
+                undo();
+                throw new ChessTimeout("");
+            }
+            undo();
+
+            //DEBUG
+            String afterMove = boardGet();
+            assert beforeMove.equals(afterMove);
+
+            alpha = Math.max(alpha, score);
+
+            if (alpha >= beta) {
+                break;
+            }
+        }
+
+        //Store in the transposition table
+        TranspositionTable.nodeType nodeType;
+        if (score <= oldAlpha) {
+            nodeType = TranspositionTable.nodeType.UPPERBOUND;
+        } else if (score >= beta) {
+            nodeType = TranspositionTable.nodeType.LOWERBOUND;
+        } else {
+            nodeType = TranspositionTable.nodeType.EXACT;
+        }
+        transpositionTable.store(gameState, depth, nodeType, score);
+
+        return score;
+    }
+
     /**
      * Evaluates valid moves using an adversary search bounded by depth and duration, performs the move with the highest eval score, and returns it as a string. Utilizes alpha beta search tree pruning.
      *
@@ -758,7 +912,7 @@ public class ChessEngine {
      * @param duration How much time is left to perform the search. (Ignored unless in "Tournament Mode".)
      * @return The performed move as a string.
      */
-    public static Move moveAlphabeta(int depth, int duration) {
+    public static Move moveAlphabetaUniterative(int depth, int duration) {
         //TODO Iterative deepening
         Move bestMove = null;
         int alpha = -infinity;
@@ -768,6 +922,9 @@ public class ChessEngine {
         if (depth == -1) {
             //TODO Tournament Mode
             depth = tournamentDepth;
+
+            //DEBUG
+            System.out.println("Remaining time: " + duration + " ms");
         }
 
         for (Move move : movesShuffled()) {
@@ -776,12 +933,7 @@ public class ChessEngine {
 
             move(move);
 
-            //DEBUG
-            if (useTranspositionTables) {
-                tempScore = -alphabetaTrans(depth -1, -beta, -alpha);
-            } else {
-                tempScore = -alphabeta(depth - 1, -beta, -alpha);
-            }
+            tempScore = -alphabetaUniterative(depth - 1, -beta, -alpha);
             undo();
 
             //Validation Test
@@ -799,44 +951,6 @@ public class ChessEngine {
     }
 
     /**
-     * Performs negamax adversary search and returns eval score at top node level, utilizing alpha beta pruning.
-     *
-     * @param depth How deep the adversary search tree should be.
-     * @param alpha alpha
-     * @param beta  beta
-     * @return The eval score at the top node level.
-     */
-    private static int alphabeta(int depth, int alpha, int beta) {
-        if (depth == 0 || winner() != '?') {
-            return eval();
-        }
-
-        int score = -infinity;
-
-        //Assess possible moves, with pruning
-        for (Move move : movesShuffled()) {
-            //Validation Test
-            String beforeMove = boardGet();
-
-            move(move);
-            score = Math.max(score, -alphabeta(depth - 1, -beta, -alpha));
-            undo();
-
-            //Validation Test
-            String afterMove = boardGet();
-            assert beforeMove.equals(afterMove);
-
-            alpha = Math.max(alpha, score);
-
-            if (alpha >= beta) {
-                break;
-            }
-        }
-
-        return score;
-    }
-
-    /**
      * Performs negamax adversary search and returns eval score at top node level, utilizing alpha beta pruning and transposition tables.
      *
      * @param depth How deep the adversary search tree should be.
@@ -844,7 +958,9 @@ public class ChessEngine {
      * @param beta  beta
      * @return The eval score at the top node level.
      */
-    private static int alphabetaTrans(int depth, int alpha, int beta) {
+    private static int alphabetaUniterative(int depth, int alpha, int beta) {
+
+
         if (depth == 0 || winner() != '?') {
             return eval();
         }
@@ -853,6 +969,7 @@ public class ChessEngine {
         int oldAlpha = alpha;
         TranspositionTable.TranspositionTableEntry entry = transpositionTable.retrieve(gameState);
         if (entry.depth >= depth) {
+
             if (entry.nodeType == TranspositionTable.nodeType.EXACT) {
                 return entry.evalScore;
             } else if (entry.nodeType == TranspositionTable.nodeType.LOWERBOUND) {
@@ -874,7 +991,7 @@ public class ChessEngine {
             String beforeMove = boardGet();
 
             move(move);
-            score = Math.max(score, -alphabetaTrans(depth - 1, -beta, -alpha));
+            score = Math.max(score, -alphabetaUniterative(depth - 1, -beta, -alpha));
             undo();
 
             //Validation Test

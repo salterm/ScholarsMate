@@ -1,6 +1,6 @@
 /*
-  CS 442 - Advanced AI: Combinatorial Games
-  Michael Salter
+    CS 442 - Advanced AI: Combinatorial Games
+    Michael Salter
 */
 
 /**
