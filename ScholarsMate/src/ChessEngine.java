@@ -7,8 +7,6 @@ import java.util.*;
 
 public class ChessEngine {
     //TODO: Remove all DEBUG blocks
-    //DEBUG
-    public static long evalCalls = 0;
 
     //Evaluation heuristic values
     private static final int pawnValue = 100;
@@ -23,7 +21,7 @@ public class ChessEngine {
     //Iterative deepening and timing control
     private static final int tournamentDepth = 4;
     private static final int tournamentDuration = 300000; //5 minutes, in milliseconds
-    private static final int tournamentMaxDepth = 11; //The furthest ahead we look, ever.
+    private static final int tournamentMaxDepth = 15; //The furthest ahead we look, ever.
     private static final int tournamentMinDepth = 5; //Where we begin iterative deepening and the shallowest we go, ever.
     private static final int tournamentTimeForMove = 7350; //For 40 moves, 7500ms is the average time for move; 7350 is a little shy to be on the safe side.
     private static int timeCounter = 0; //A counter to keep us from actually checking the system time too frequently
@@ -65,9 +63,6 @@ public class ChessEngine {
         gameState.setBoard(startingBoard);
         gameState.setMoveNumber(startingMoveNumber);
         gameState.setIsWhitesPly(startingIsWhitesPly);
-
-        //DEBUG
-        evalCalls = 0;
     }
 
     /**
@@ -87,26 +82,9 @@ public class ChessEngine {
     public static void boardSet(String strIn) {
         String[] strInSplit = strIn.split("\\n");
 
-        assert strInSplit.length == 7 : "Invalid board format: " + strInSplit.length;
-
         String[] moveAndPly = strInSplit[0].split("\\s");
 
-        //Validation test
-        assert moveAndPly.length == 2 : "Invalid first line: " + strInSplit[0];
-
-        //Validation test
-        for (int i = 1; i < strInSplit.length; i++) {
-            String s = strInSplit[i];
-            assert (s.length() == 5) : "Invalid board line: " + s;
-        }
-
         int newMove = Integer.valueOf(moveAndPly[0]);
-
-        //Validation test
-        assert (newMove >= 1 || newMove <= 41) : "Invalid move number: " + newMove;
-
-        //Validation test
-        assert (moveAndPly[1].equals(whiteTurn) || moveAndPly[1].equals(blackTurn)) : "Invalid turn format: " + moveAndPly[1];
 
         boolean newIsWhitesPly = moveAndPly[1].equals(whiteTurn);
 
@@ -115,10 +93,6 @@ public class ChessEngine {
         for (int i = 0; i < boardHeight; i++) {
             for (int j = 0; j < boardWidth; j++) {
                 a = strInSplit[i + 1].charAt(j);
-
-                //Validation test
-                assert validPieces.contains(a) || a == emptySpace : "Invalid game piece: " + a;
-
                 newBoard[i][j] = a;
             }
         }
@@ -268,9 +242,6 @@ public class ChessEngine {
      * @return the eval score.
      */
     public static int eval() {
-        //DEBUG
-        evalCalls++;
-
         if (winner() == '=') {
             return 0;
         }
@@ -777,9 +748,6 @@ public class ChessEngine {
 
             //Iteratively deepen the search until we run out of time
             for (depth = tournamentMinDepth; depth <= tournamentMaxDepth; depth++) {
-                //DEBUG
-                System.out.println("time: " + cachedTime + " ms, limit: " + tournamentTimeLimit + " ms, depth: " + depth);
-
                 Move candidateBestMove = null;
                 int alpha = -infinity;
                 int beta = infinity;
@@ -788,10 +756,6 @@ public class ChessEngine {
                 //Negamax search
                 try {
                     for (Move move : movesShuffled()) {
-
-                        //DEBUG
-                        String beforeMove = boardGet();
-
                         //Try the move
                         move(move);
 
@@ -801,10 +765,6 @@ public class ChessEngine {
                         //Undo the move
                         undo();
 
-                        //DEBUG
-                        String afterMove = boardGet();
-                        assert beforeMove.equals(afterMove);
-
                         //If our move's score is better than the highest remembered score
                         if (tempScore > alpha) {
                             candidateBestMove = move;
@@ -813,9 +773,8 @@ public class ChessEngine {
                     }
                 } catch (ChessTimeout e) {
                     //If we're over time, don't deepen the search!
-
                     //DEBUG
-                    System.out.println(e.getMessage());
+                    System.out.println("Depth " + depth + " " + e.getMessage());
 
                     undo();
                     break;
@@ -827,9 +786,7 @@ public class ChessEngine {
 
             //Move and return the move
             if (bestMove == null) {
-                //DEBUG
                 System.out.println("Not enough time: moved greedily!");
-
                 return moveGreedy();
             } else {
                 move(bestMove);
@@ -879,9 +836,6 @@ public class ChessEngine {
 
         //Assess possible moves, with pruning
         for (Move move : movesShuffled()) {
-            //DEBUG
-            String beforeMove = boardGet();
-
             move(move);
             try {
                 score = Math.max(score, -alphabeta(depth - 1, -beta, -alpha));
@@ -890,10 +844,6 @@ public class ChessEngine {
                 throw e;
             }
             undo();
-
-            //DEBUG
-            String afterMove = boardGet();
-            assert beforeMove.equals(afterMove);
 
             alpha = Math.max(alpha, score);
 
@@ -923,24 +873,17 @@ public class ChessEngine {
      * @return The performed move as a string.
      */
     public static Move moveAlphabetaUniterative(int depth) {
-        //TODO Iterative deepening
         Move bestMove = null;
         int alpha = -infinity;
         int beta = infinity;
         int tempScore = 0;
 
         for (Move move : movesShuffled()) {
-            //Validation Test
-            String beforeMove = boardGet();
 
             move(move);
 
             tempScore = -alphabetaUniterative(depth - 1, -beta, -alpha);
             undo();
-
-            //Validation Test
-            String afterMove = boardGet();
-            assert beforeMove.equals(afterMove);
 
             if (tempScore > alpha) {
                 bestMove = move;
@@ -989,16 +932,10 @@ public class ChessEngine {
 
         //Assess possible moves, with pruning
         for (Move move : movesShuffled()) {
-            //Validation Test
-            String beforeMove = boardGet();
 
             move(move);
             score = Math.max(score, -alphabetaUniterative(depth - 1, -beta, -alpha));
             undo();
-
-            //Validation Test
-            String afterMove = boardGet();
-            assert beforeMove.equals(afterMove);
 
             alpha = Math.max(alpha, score);
 

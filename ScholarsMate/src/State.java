@@ -58,18 +58,11 @@ public class State {
     }
 
     public char getPosition(int row, int column) throws ChessError {
-        if (row < 0 || row >= boardHeight || column < 0 || column >= boardWidth) {
-            throw new ChessError("Invalid board dimensions: " + row + " x " + column);
-        }
         return board[row][column];
     }
 
     public void setPosition(int row, int column, char position) throws ChessError {
-        if (row < 0 || row >= boardHeight || column < 0 || column >= boardWidth) {
-            throw new ChessError("Invalid board dimensions: " + row + " x " + column);
-        } else {
             board[row][column] = position;
-        }
     }
 
     public void move(Move m) {
@@ -102,7 +95,6 @@ public class State {
             }
             s += "\n";
         }
-        assert s.length() > 39 && s.length() < 42;
         return s;
     }
 }

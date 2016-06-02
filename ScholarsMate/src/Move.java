@@ -24,36 +24,16 @@ public class Move {
         startColumn = interpretColumn(s.charAt(0));
         startRow = interpretRow(Character.getNumericValue(s.charAt(1)));
 
-        //Validation test
-        if (!ChessEngine.isValid(startColumn, startRow)) {
-            throw new ChessError("Invalid starting position for move: " + s + " (" + ChessEngine.columnNames[startColumn] + "," + startRow + ")");
-        }
-
         endColumn = interpretColumn(s.charAt(3));
         endRow = interpretRow(Character.getNumericValue(s.charAt(4)));
-
-        //Validation test
-        if (!ChessEngine.isValid(endColumn, endRow)) {
-            throw new ChessError("Invalid ending position for move: " + s + " (" + ChessEngine.columnNames[endColumn] + "," + endRow + ")");
-        }
 
         moved = state.getPosition(startRow, startColumn);
         captured = state.getPosition(endRow, endColumn);
     }
 
     public Move(int startRow, int startColumn, int endRow, int endColumn, State state) throws ChessError {
-        //Validation test
-        if (!ChessEngine.isValid(startColumn, startRow)) {
-            throw new ChessError("Invalid starting position for move: " + "(" + ChessEngine.columnNames[startColumn] + "," + startRow + ")");
-        }
-
         this.startRow = startRow;
         this.startColumn = startColumn;
-
-        //Validation test
-        if (!ChessEngine.isValid(endColumn, endRow)) {
-            throw new ChessError("Invalid ending position for move: " + "(" + ChessEngine.columnNames[endColumn] + "," + endRow + ")");
-        }
 
         this.endRow = endRow;
         this.endColumn = endColumn;
@@ -76,7 +56,7 @@ public class Move {
             case 'e':
                 return 4;
             default:
-                throw new ChessError("Invalid column: " + c);
+                return -1;
         }
     }
 
@@ -95,7 +75,7 @@ public class Move {
             case 6:
                 return 0;
             default:
-                throw new ChessError("Invalid row: " + i);
+                return -1;
         }
     }
 
