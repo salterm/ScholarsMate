@@ -24,8 +24,8 @@ public class ChessEngine {
     private static final int tournamentDepth = 4;
     private static final int tournamentDuration = 300000; //5 minutes, in milliseconds
     private static final int tournamentMaxDepth = 11; //The furthest ahead we look, ever.
-    private static final int tournamentMinDepth = 6; //Where we begin iterative deepening and the shallowest we go, ever.
-    private static final int tournamentTimeForMove = 7200; //For 40 moves, 7500ms is the average time for move; 7200 is a little shy to be on the safe side.
+    private static final int tournamentMinDepth = 5; //Where we begin iterative deepening and the shallowest we go, ever.
+    private static final int tournamentTimeForMove = 7350; //For 40 moves, 7500ms is the average time for move; 7350 is a little shy to be on the safe side.
     private static int timeCounter = 0; //A counter to keep us from actually checking the system time too frequently
     private static final int timeCounterThreshold = 1000; //An arbitrary threshold to keep us from actually checking the system time too frequently
     private static long cachedTime = 0; //The time in milliseconds the last time we checked
@@ -759,7 +759,13 @@ public class ChessEngine {
         return score;
     }
 
-    public static Move moveAlphabeta(int depth, int duration) {
+    /**
+     * Performs Negamax search, implementing alpha-beta pruning, iterative deepening, and transposition tables.
+     *
+     * @param depth The depth of the search tree; -1 indicates "Tournament Mode", where the function will instead use iterative deepening based on a preset duration.
+     * @return
+     */
+    public static Move moveAlphabeta(int depth) {
         //Get the time after which we should stop trying
         cachedTime = System.currentTimeMillis();
         tournamentTimeLimit = cachedTime + tournamentTimeForMove;
@@ -807,6 +813,10 @@ public class ChessEngine {
                     }
                 } catch (ChessTimeout e) {
                     //If we're over time, don't deepen the search!
+
+                    //DEBUG
+                    System.out.println(e.getMessage());
+
                     undo();
                     break;
                 }
@@ -816,13 +826,18 @@ public class ChessEngine {
             }
 
             //Move and return the move
-            move(bestMove);
-            return bestMove;
+            if (bestMove == null) {
+                //DEBUG
+                System.out.println("Not enough time: moved greedily!");
+
+                return moveGreedy();
+            } else {
+                move(bestMove);
+                return bestMove;
+            }
         } else {
-            return moveAlphabetaUniterative(depth, duration);
+            return moveAlphabetaUniterative(depth);
         }
-
-
     }
 
     private static int alphabeta(int depth, int alpha, int beta) throws ChessTimeout {
@@ -832,13 +847,9 @@ public class ChessEngine {
             timeCounter = 0;
             cachedTime = System.currentTimeMillis();
         }
-
         //Check whether we have time for this or not
         if (cachedTime > tournamentTimeLimit) {
-            //DEBUG
-            System.out.println("Outta time!");
-
-            throw new ChessTimeout("");
+            throw new ChessTimeout("Outta time!");
         }
 
         //If we're past our depth or the game is over, just return the eval score
@@ -876,7 +887,7 @@ public class ChessEngine {
                 score = Math.max(score, -alphabeta(depth - 1, -beta, -alpha));
             } catch (ChessTimeout e) {
                 undo();
-                throw new ChessTimeout("");
+                throw e;
             }
             undo();
 
@@ -908,24 +919,15 @@ public class ChessEngine {
     /**
      * Evaluates valid moves using an adversary search bounded by depth and duration, performs the move with the highest eval score, and returns it as a string. Utilizes alpha beta search tree pruning.
      *
-     * @param depth    How deep the adversary search tree should be. (-1 indicates "Tournament Mode", meaning duration will be used)
-     * @param duration How much time is left to perform the search. (Ignored unless in "Tournament Mode".)
+     * @param depth    How deep the adversary search tree should be.
      * @return The performed move as a string.
      */
-    public static Move moveAlphabetaUniterative(int depth, int duration) {
+    public static Move moveAlphabetaUniterative(int depth) {
         //TODO Iterative deepening
         Move bestMove = null;
         int alpha = -infinity;
         int beta = infinity;
         int tempScore = 0;
-
-        if (depth == -1) {
-            //TODO Tournament Mode
-            depth = tournamentDepth;
-
-            //DEBUG
-            System.out.println("Remaining time: " + duration + " ms");
-        }
 
         for (Move move : movesShuffled()) {
             //Validation Test

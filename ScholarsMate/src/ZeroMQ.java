@@ -98,7 +98,7 @@ public class ZeroMQ {
                 jsonobjectOut.put("strOut", ChessEngine.moveNegamax(jsonobjectIn.getInt("intDepth"), jsonobjectIn.getInt("intDuration")));
 
             } else if (jsonobjectIn.getString("strFunction").equals("chess_moveAlphabeta")) {
-                jsonobjectOut.put("strOut", ChessEngine.moveAlphabetaUniterative(jsonobjectIn.getInt("intDepth"), jsonobjectIn.getInt("intDuration")));
+                jsonobjectOut.put("strOut", ChessEngine.moveAlphabeta(jsonobjectIn.getInt("intDepth")));
 
             } else if (jsonobjectIn.getString("strFunction").equals("chess_undo")) {
                 ChessEngine.undo();

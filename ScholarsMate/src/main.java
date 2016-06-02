@@ -15,7 +15,7 @@ public class main {
         assert main.clientName.length() < 16;
         assert !main.clientName.contains(" ");
 
-/*
+        /*
         //DEBUG
         int numGames = 10;
         int depth = -1;
@@ -44,11 +44,13 @@ public class main {
         System.out.println("Avg game time: " + (results.avgGameTime / 1000000) + " ms / " + (results.avgGameTime / 1000000000) + " s");
         System.out.println("Max game time: " + (results.maxGameTime / 1000000) + " ms / " + (results.maxGameTime / 1000000000) + " s");
         System.out.println("Min game time: " + (results.minGameTime / 1000000) + " ms / " + (results.minGameTime / 1000000000) + " s");
-*/
+
+        */
 
         ZeroMQ.start();
     }
 
+    //DEBUG
     private static class tuple {
         public long avgMoves;
         public long avgEvalCalls;
@@ -71,6 +73,7 @@ public class main {
         }
     }
 
+    //DEBUG
     public static tuple playGame(int depth, int duration, int numGames) {
         long gameStartTime;
         long startTime;
@@ -97,7 +100,7 @@ public class main {
                 //White's ply
                 startTime = System.nanoTime();
 
-                move = ChessEngine.moveAlphabeta(depth, whiteRemainingTime);
+                move = ChessEngine.moveAlphabeta(depth);
 
                 endTime = System.nanoTime();
 
@@ -118,7 +121,7 @@ public class main {
                 if (ChessEngine.winner() == '?') {
                     startTime = System.nanoTime();
 
-                    move = ChessEngine.moveAlphabeta(depth, blackRemainingTime);
+                    move = ChessEngine.moveAlphabeta(depth);
 
                     endTime = System.nanoTime();
 
